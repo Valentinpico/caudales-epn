@@ -25,6 +25,7 @@ services:
       ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-caudales};Username=${POSTGRES_USER:-caudales};Password=${POSTGRES_PASSWORD:-caudales}"
       Admin__Password: ${ADMIN_PASSWORD:-caudales-admin-2026}
       RawData__Dir: /app/info
+      Cors__Origin: http://localhost:5174
     ports:
       - "8081:8080"
     volumes:

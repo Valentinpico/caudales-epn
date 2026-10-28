@@ -14,6 +14,7 @@ public record StationSummary(
 
 public record SeriesPoint(DateOnly Date, double Value, int Days, bool Suspect);
 public record MonthCoverage(int Year, int Month, int Days, int DaysInMonth);
+public record YearCoverage(string Code, int Year, int Days);
 public record IssueCount(Variable Variable, string Kind, int Count);
 public record Overview(int Stations, int Observations, int Issues, int Documents, int GraphNodes, int GraphEdges,
     DateOnly? First, DateOnly? Last);
@@ -21,7 +22,7 @@ public record Overview(int Stations, int Observations, int Issues, int Documents
 /// <summary>Read-side queries over the hydrometeorological series.</summary>
 public class SeriesService(AppDbContext db)
 {
-    // ponytail: stats are aggregated on every call (~2M rows, PK-indexed). Cache or
+    // Note: stats are aggregated on every call (~2M rows, PK-indexed). Cache or
     // materialize a summary table if the station list becomes slow.
     public async Task<List<StationSummary>> GetStationsAsync(Variable? variable)
     {
@@ -105,6 +106,14 @@ public class SeriesService(AppDbContext db)
             .Select(m => new MonthCoverage(m.Year, m.Month, m.Days, DateTime.DaysInMonth(m.Year, m.Month)))
             .ToList();
     }
+
+    /// <summary>Days with data per station and year: the network-wide coverage matrix.</summary>
+    public async Task<List<YearCoverage>> GetCoverageAsync(Variable variable) =>
+        (await db.Observations.Where(o => o.Variable == variable)
+            .GroupBy(o => new { o.StationCode, o.Date.Year })
+            .Select(g => new { g.Key.StationCode, g.Key.Year, Days = g.Count() }).ToListAsync())
+        .Select(x => new YearCoverage(x.StationCode, x.Year, x.Days))
+        .OrderBy(x => x.Code).ThenBy(x => x.Year).ToList();
 
     public async Task<List<QualityIssue>> GetIssuesAsync(string? code, Variable? variable, string? kind)
     {

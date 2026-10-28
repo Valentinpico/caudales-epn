@@ -17,8 +17,8 @@ public class KnowledgeGraphService(AppDbContext db)
 {
     private static readonly (Variable Variable, string Slug, string Label)[] Datasets =
     [
-        (Variable.Precipitation, "precipitation", "INAMHI · Precipitación diaria (cruda)"),
-        (Variable.Temperature, "temperature", "INAMHI · Temperatura diaria (cruda)"),
+        (Variable.Precipitation, "precipitation", "Precipitación diaria INAMHI (cruda)"),
+        (Variable.Temperature, "temperature", "Temperatura diaria INAMHI (cruda)"),
     ];
 
     public async Task RebuildAsync()
@@ -57,7 +57,7 @@ public class KnowledgeGraphService(AppDbContext db)
         var withData = stationVariables.Select(x => x.StationCode).ToHashSet();
         nodes.AddRange(stations.Where(s => withData.Contains(s.Code)).Select(s => new GraphNode
         {
-            Id = $"station:{s.Code}", Kind = "Station", Label = $"{s.Code} · {s.Name}", Description = s.Province,
+            Id = $"station:{s.Code}", Kind = "Station", Label = $"{s.Code} {s.Name}", Description = s.Province,
         }));
 
         foreach (var d in await db.Documents.ToListAsync())

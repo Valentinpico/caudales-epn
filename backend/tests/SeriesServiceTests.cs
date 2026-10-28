@@ -120,4 +120,18 @@ public class SeriesServiceTests
 
         Assert.Equal("codigo,fecha,valor,sospechoso\nM0001,1970-01-01,1.5,false\n", csv);
     }
+
+    [Fact]
+    public async Task Coverage_counts_days_per_station_and_year()
+    {
+        var db = Db();
+        Add(db, Variable.Precipitation, "1970-01-01", 1.0);
+        Add(db, Variable.Precipitation, "1970-06-01", 1.0);
+        Add(db, Variable.Precipitation, "1971-01-01", 1.0);
+        Add(db, Variable.Temperature, "1971-01-01", 9.0);
+
+        var c = await new SeriesService(db).GetCoverageAsync(Variable.Precipitation);
+
+        Assert.Equal([("M0001", 1970, 2), ("M0001", 1971, 1)], c.Select(x => (x.Code, x.Year, x.Days)));
+    }
 }

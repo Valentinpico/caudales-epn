@@ -23,6 +23,8 @@ public static class Endpoints
             Results.File(System.Text.Encoding.UTF8.GetBytes(await s.ExportCsvAsync(code, Parse(variable))),
                 "text/csv", $"{code}_{variable}.csv"));
 
+        g.MapGet("/coverage", (string variable, SeriesService s) => s.GetCoverageAsync(Parse(variable)));
+
         // Quality control
         g.MapGet("/quality/summary", (SeriesService s) => s.GetIssueSummaryAsync());
         g.MapGet("/quality/issues", (string? station, string? variable, string? kind, SeriesService s) =>

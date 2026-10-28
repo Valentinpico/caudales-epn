@@ -18,13 +18,13 @@ public static class ProjectKnowledge
             "Regionalización de caudales en Ecuador (FDA + homogeneización)",
             "Metodología para la regionalización de caudales en Ecuador basada en el Análisis de Datos Funcionales y la homogeneización de variables hidrometeorológicas. Proyecto semilla, Departamento de Matemática, EPN."),
 
-        new("objective:OE1", "Objective", "OE1 · Suavizamiento, imputación y agrupamiento funcional",
+        new("objective:OE1", "Objective", "OE1: Suavizamiento, imputación y agrupamiento funcional",
             "Ejecutar el proceso de suavizamiento, imputación y agrupamiento funcional de variables meteorológicas mediante FDA, utilizando bases de Fourier y clustering."),
-        new("objective:OE2", "Objective", "OE2 · Homogeneización robusta",
+        new("objective:OE2", "Objective", "OE2: Homogeneización robusta",
             "Desarrollar un protocolo de homogeneización hidrometeorológica robusta mediante Climatol, con Moving Block Bootstrap y Stationary Bootstrap para umbrales de detección de quiebres al 95 % de confianza."),
-        new("objective:OE3", "Objective", "OE3 · Regionalización de caudales",
+        new("objective:OE3", "Objective", "OE3: Regionalización de caudales",
             "Diseñar una metodología de regionalización de caudales mediante clustering funcional, transformando registros discretos en curvas continuas y llenando vacíos."),
-        new("objective:OE4", "Objective", "OE4 · Difusión",
+        new("objective:OE4", "Objective", "OE4: Difusión",
             "Difundir los resultados mediante protocolos técnicos para organismos rectores y dos artículos científicos indexados (Scopus/WoS)."),
 
         new("activity:A1.1", "Activity", "Levantamiento de datos de series de precipitación", "Año 1, meses 1–3."),
@@ -58,15 +58,15 @@ public static class ProjectKnowledge
         new("researcher:mollineda", "Researcher", "Ramón A. Mollineda Cárdenas", "Colaborador externo. Doctor en Informática."),
         new("researcher:torres", "Researcher", "Sandra Janeth Torres Paguay", "Colaboradora externa. Especialista en Meteorología."),
 
-        new("institution:epn-dm", "Institution", "EPN · Departamento de Matemática"),
-        new("institution:epn-dica", "Institution", "EPN · Departamento de Ingeniería Civil y Ambiental"),
+        new("institution:epn-dm", "Institution", "EPN, Departamento de Matemática"),
+        new("institution:epn-dica", "Institution", "EPN, Departamento de Ingeniería Civil y Ambiental"),
         new("institution:inamhi", "Institution", "INAMHI", "Instituto Nacional de Meteorología e Hidrología."),
         new("institution:uji", "Institution", "Universitat Jaume I (INIT)", "Institute of New Imaging Technologies, Castellón."),
 
-        new("sdg:6", "SDG", "ODS 6 · Agua limpia y saneamiento"),
-        new("sdg:9", "SDG", "ODS 9 · Industria, innovación e infraestructura"),
-        new("sdg:13", "SDG", "ODS 13 · Acción por el clima"),
-        new("sdg:17", "SDG", "ODS 17 · Alianzas para lograr los objetivos"),
+        new("sdg:6", "SDG", "ODS 6: Agua limpia y saneamiento"),
+        new("sdg:9", "SDG", "ODS 9: Industria, innovación e infraestructura"),
+        new("sdg:13", "SDG", "ODS 13: Acción por el clima"),
+        new("sdg:17", "SDG", "ODS 17: Alianzas para lograr los objetivos"),
     ];
 
     public static readonly Edge[] Edges =

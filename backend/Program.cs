@@ -29,7 +29,7 @@ app.UseExceptionHandler();
 var dataRoot = Path.Combine(app.Environment.ContentRootPath, "data");
 var rawDir = cfg["RawData:Dir"] ?? Path.Combine(app.Environment.ContentRootPath, "info");
 
-// ponytail: EnsureCreated, no migration history. Switch to EF Migrations when the schema
+// Note: EnsureCreated, no migration history. Switch to EF Migrations when the schema
 // starts changing in production.
 using (var scope = app.Services.CreateScope())
 {

@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Archivo", system-ui, sans-serif;
+    font-variation-settings: "wdth" 100;
+    background: theme("colors.paper");
+    color: theme("colors.ink");
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  :focus-visible {
+    outline: 2px solid theme("colors.river");
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Wide, heavy cut for headings; condensed cut for codes and dense tables. */
+  .type-display {
+    font-variation-settings: "wdth" 118;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .type-condensed {
+    font-variation-settings: "wdth" 72;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .panel {
+    @apply bg-sheet border border-grid rounded-sm;
+  }
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-sm px-3 py-1.5 text-sm font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-river text-white hover:bg-deep;
+  }
+  .btn-quiet {
+    @apply btn border border-grid bg-sheet text-ink hover:border-river;
+  }
+  .field {
+    @apply w-full rounded-sm border border-grid bg-sheet px-2.5 py-1.5 text-sm placeholder:text-muted focus:border-river focus:outline-none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
