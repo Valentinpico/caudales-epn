@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-caudales}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-caudales}
+      POSTGRES_DB: ${POSTGRES_DB:-caudales}
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-caudales}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-caudales};Username=${POSTGRES_USER:-caudales};Password=${POSTGRES_PASSWORD:-caudales}"
+      Admin__Password: ${ADMIN_PASSWORD:-caudales-admin-2026}
+      RawData__Dir: /app/info
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./backend:/app
+      - ./data:/app/data          # repository files (seed + uploads), served at /files
+      - ./info:/app/info:ro       # raw INAMHI exports
+      - backend_obj:/app/obj
+      - backend_bin:/app/bin
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8081
+    ports:
+      - "5174:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  pgdata:
+  backend_obj:
+  backend_bin:
