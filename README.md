@@ -29,8 +29,8 @@ soportado en base de datos.
 | API | http://localhost:8081 |
 | PostgreSQL | localhost:5434 |
 
-En el primer arranque la API carga ~2 millones de registros diarios (COPY binario, menos de un
-minuto) y registra los hallazgos de control de calidad. Los arranques siguientes no recargan.
+En el primer arranque la API carga ~2 millones de registros diarios (COPY binario de PostgreSQL)
+y registra los hallazgos de control de calidad. Los arranques siguientes no recargan.
 
 ### Coordenadas de estaciones (opcional)
 

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" font-family="Archivo, Helvetica, Arial, sans-serif" font-size="13">
+  <rect width="920" height="420" fill="#F4F6F5"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#14232E"/></marker>
+  </defs>
+  <rect x="20" y="40" width="880" height="360" fill="none" stroke="#5B6B72" stroke-dasharray="6 4" rx="6"/>
+  <text x="36" y="64" fill="#5B6B72">Docker Compose</text>
+
+  <rect x="40" y="150" width="140" height="80" fill="#fff" stroke="#14232E" rx="4"/>
+  <text x="110" y="185" text-anchor="middle" font-weight="700" fill="#14232E">Navegador</text>
+  <text x="110" y="205" text-anchor="middle" fill="#5B6B72">usuario</text>
+
+  <rect x="230" y="140" width="170" height="100" fill="#fff" stroke="#1F6F8B" stroke-width="2" rx="4"/>
+  <text x="315" y="172" text-anchor="middle" font-weight="700" fill="#14232E">Frontend</text>
+  <text x="315" y="192" text-anchor="middle" fill="#5B6B72">React + TypeScript</text>
+  <text x="315" y="210" text-anchor="middle" fill="#5B6B72">Vite + Tailwind CSS</text>
+
+  <rect x="450" y="90" width="230" height="200" fill="#fff" stroke="#1F6F8B" stroke-width="2" rx="4"/>
+  <text x="565" y="118" text-anchor="middle" font-weight="700" fill="#14232E">API .NET 9 (REST)</text>
+  <rect x="470" y="132" width="190" height="34" fill="#E3ECEB" rx="3"/><text x="565" y="154" text-anchor="middle">Endpoints (Api)</text>
+  <rect x="470" y="174" width="190" height="34" fill="#E3ECEB" rx="3"/><text x="565" y="196" text-anchor="middle">Servicios (Application)</text>
+  <rect x="470" y="216" width="190" height="34" fill="#E3ECEB" rx="3"/><text x="565" y="238" text-anchor="middle" font-size="12">EF Core + COPY (Infrastructure)</text>
+  <text x="565" y="275" text-anchor="middle" fill="#5B6B72" font-size="12">Control de calidad y grafo</text>
+
+  <rect x="730" y="90" width="150" height="110" fill="#fff" stroke="#0B3A53" stroke-width="2" rx="4"/>
+  <text x="805" y="120" text-anchor="middle" font-weight="700" fill="#14232E">PostgreSQL 16</text>
+  <text x="805" y="142" text-anchor="middle" fill="#5B6B72" font-size="12">series diarias</text>
+  <text x="805" y="160" text-anchor="middle" fill="#5B6B72" font-size="12">repositorio</text>
+  <text x="805" y="178" text-anchor="middle" fill="#5B6B72" font-size="12">nodos y aristas</text>
+
+  <rect x="730" y="230" width="150" height="70" fill="#fff" stroke="#A8742A" stroke-width="2" rx="4"/>
+  <text x="805" y="258" text-anchor="middle" font-weight="700" fill="#14232E">Archivos</text>
+  <text x="805" y="278" text-anchor="middle" fill="#5B6B72" font-size="12">CSV INAMHI, documentos</text>
+
+  <path d="M180 190H226" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <path d="M400 190H446" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <text x="425" y="176" text-anchor="middle" font-size="10" fill="#5B6B72">REST</text>
+  <path d="M680 145H726" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <path d="M680 255H726" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+</svg>
