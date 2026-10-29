@@ -1,20 +1,18 @@
 import { useRef, useState } from "react";
-import { BrowserRouter, NavLink, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, NavLink, Route, Routes } from "react-router-dom";
 import { AdminProvider, useAdmin } from "./shared/admin";
 import { OverviewPage } from "./features/overview/OverviewPage";
 import { StationsPage } from "./features/stations/StationsPage";
 import { QualityPage } from "./features/quality/QualityPage";
 import { RepositoryPage } from "./features/repository/RepositoryPage";
 import { GraphPage } from "./features/graph/GraphPage";
-import { ProjectPage } from "./features/project/ProjectPage";
 
 const NAV = [
-  { to: "/", label: "Resumen" },
+  { to: "/", label: "Inicio" },
   { to: "/estaciones", label: "Estaciones" },
   { to: "/calidad", label: "Calidad de datos" },
   { to: "/repositorio", label: "Repositorio" },
   { to: "/grafo", label: "Grafo de conocimiento" },
-  { to: "/proyecto", label: "Proyecto" },
 ];
 
 function Mark() {
@@ -108,7 +106,7 @@ function Shell() {
           <Route path="/calidad" element={<QualityPage />} />
           <Route path="/repositorio" element={<RepositoryPage />} />
           <Route path="/grafo" element={<GraphPage />} />
-          <Route path="/proyecto" element={<ProjectPage />} />
+          <Route path="/proyecto" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
       <footer className="border-t border-grid">

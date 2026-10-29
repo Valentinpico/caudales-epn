@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api, type Variable } from "../../shared/api";
 import { formatInt, variableLabel } from "../../shared/format";
@@ -6,39 +6,77 @@ import { useApi } from "../../shared/useApi";
 import { ErrorNote, Loading } from "../../shared/Status";
 import { VariableToggle } from "../../shared/VariableToggle";
 import { CoverageCarpet } from "./CoverageCarpet";
+import { projectProfile } from "./projectProfile";
+import { Objectives, ResearchLines, Team } from "./ProjectSections";
 
 export function OverviewPage() {
   const [variable, setVariable] = useState<Variable>("precipitation");
   const navigate = useNavigate();
   const overview = useApi(api.overview, []);
+  const graph = useApi(api.graph, []);
   const stations = useApi(() => api.stations(variable), [variable]);
   const coverage = useApi(() => api.coverage(variable), [variable]);
-  const project = useApi(() => api.neighborhood("project:caudales"), []);
 
   const o = overview.data;
   const firstYear = o?.first ? +o.first.slice(0, 4) : 1960;
   const lastYear = o?.last ? +o.last.slice(0, 4) : 2023;
-  const objectives = (project.data?.neighbors ?? [])
-    .filter((n) => n.kind === "Objective")
-    .sort((a, b) => a.id.localeCompare(b.id));
+  const profile = useMemo(() => graph.data && projectProfile(graph.data.nodes, graph.data.edges), [graph.data]);
 
   return (
-    <div className="space-y-14">
-      <section className="max-w-4xl space-y-4">
-        <h1 className="type-display text-4xl sm:text-5xl">
-          Series hidrometeorológicas de la red INAMHI, {firstYear} a {lastYear}
-        </h1>
-        {overview.error && <ErrorNote message={overview.error} />}
-        {o && (
-          <p className="max-w-[68ch] text-lg text-muted num">
-            {formatInt(o.observations)} registros diarios de precipitación y temperatura de {o.stations} estaciones,
-            depurados con {formatInt(o.issues)} hallazgos de control de calidad. Son el insumo del proyecto de
-            regionalización de caudales mediante análisis de datos funcionales.
+    <div className="space-y-16">
+      <section>
+        <div className="max-w-4xl space-y-5">
+          <p className="type-condensed text-sm font-bold uppercase tracking-wider text-river">
+            Proyecto semilla · EPN, Departamento de Matemática
           </p>
-        )}
+          <h1 className="type-display text-4xl sm:text-5xl">
+            Regionalización de caudales en Ecuador mediante análisis de datos funcionales
+          </h1>
+          <p className="max-w-[64ch] text-lg text-muted">
+            Plataforma del proyecto: series hidrometeorológicas del INAMHI depuradas y trazables, repositorio de
+            documentos y grafo de conocimiento que enlaza objetivos, métodos, datos y equipo.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Link to="/estaciones" className="btn-primary">
+              Explorar estaciones
+            </Link>
+            <a href="#equipo" className="btn-quiet">
+              Conocer al equipo
+            </a>
+          </div>
+        </div>
+        {graph.error && <ErrorNote message={graph.error} />}
       </section>
 
-      <section className="space-y-4" aria-labelledby="coverage-title">
+      {o && (
+        <section aria-label="Cifras de la plataforma" className="grid grid-cols-2 gap-px bg-deep/20 sm:grid-cols-3 lg:grid-cols-6">
+          {[
+            [o.stations, "estaciones"],
+            [`${firstYear}–${lastYear}`, "período de registro"],
+            [formatInt(o.observations), "registros diarios"],
+            [formatInt(o.issues), "hallazgos de calidad"],
+            [profile?.lines.length ?? "–", "líneas de investigación"],
+            [profile?.team.length ?? "–", "investigadores"],
+          ].map(([value, label]) => (
+            <div key={label} className="bg-deep px-5 py-6 text-white">
+              <p className="type-display text-3xl num">{value}</p>
+              <p className="mt-1 text-sm text-white/75">{label}</p>
+            </div>
+          ))}
+        </section>
+      )}
+      {overview.error && <ErrorNote message={overview.error} />}
+
+      {profile ? (
+        <>
+          <ResearchLines lines={profile.lines} />
+          <Team team={profile.team} />
+        </>
+      ) : (
+        !graph.error && <Loading what="la información del proyecto" />
+      )}
+
+      <section className="space-y-4 border-t border-grid pt-10" aria-labelledby="coverage-title">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="coverage-title" className="text-xl font-semibold">
             Cobertura de {variableLabel[variable].toLowerCase()} por estación y año
@@ -59,33 +97,7 @@ export function OverviewPage() {
         )}
       </section>
 
-      <section className="grid gap-10 border-t border-grid pt-10 lg:grid-cols-[1fr_1.4fr]">
-        <div className="space-y-3">
-          <h2 className="text-xl font-semibold">Objetivos del proyecto</h2>
-          <p className="max-w-[52ch] text-muted">
-            Metodología para la regionalización de caudales en Ecuador basada en el análisis de datos funcionales y la
-            homogeneización de variables hidrometeorológicas. Cada objetivo está enlazado en el grafo con sus
-            actividades, métodos y documentos.
-          </p>
-          <Link to="/grafo" className="inline-block text-sm font-medium text-river underline underline-offset-4">
-            Explorar el grafo de conocimiento
-          </Link>
-        </div>
-        <ol className="divide-y divide-grid border-y border-grid">
-          {objectives.map((obj) => {
-            const [code, title] = obj.label.split(": ");
-            return (
-              <li key={obj.id} className="grid grid-cols-[3.5rem_1fr] gap-3 py-4">
-                <span className="type-condensed text-lg font-bold text-river">{code}</span>
-                <div>
-                  <p className="font-semibold">{title}</p>
-                  <p className="text-sm text-muted">{obj.description}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-      </section>
+      {profile && <Objectives objectives={profile.objectives} sdgs={profile.sdgs} />}
 
       {o && (
         <section className="grid gap-px overflow-hidden border border-grid bg-grid sm:grid-cols-3">
