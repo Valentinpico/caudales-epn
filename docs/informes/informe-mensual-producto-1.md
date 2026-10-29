@@ -51,10 +51,11 @@ Durante el período se desarrollaron las siguientes actividades:
    el proyecto, sus objetivos, actividades y métodos, los conjuntos de datos, estaciones y
    variables, los documentos, el equipo, las instituciones, las líneas de investigación y
    los ODS (154 nodos y 419 relaciones), con visualización interactiva.
-9. Desarrollo de la página del **proyecto**, con sus líneas de investigación, el equipo,
-   los objetivos específicos y los ODS, obtenidos del grafo de conocimiento.
+9. Desarrollo de la **página de inicio** del proyecto, con sus líneas de investigación,
+   el equipo, la cobertura de la red, los objetivos específicos y los ODS, obtenidos del
+   grafo de conocimiento.
 10. Implementación del modo administración (control de acceso por contraseña, lectura
-   pública por defecto) y de pruebas automatizadas para backend y frontend (41 pruebas).
+   pública por defecto) y de pruebas automatizadas para backend y frontend (43 pruebas).
 11. Elaboración del informe técnico del producto y control de versiones (Git).
 
 ## 3. PRODUCTOS ALCANZADOS
@@ -89,7 +90,7 @@ homogeneizadas y los resultados de la regionalización en las fases siguientes.
 
 ### Evidencias
 
-![Página de resumen con la matriz de cobertura de precipitación por estación y año.](../capturas/producto-1/resumen-cobertura.png)
+![Página de inicio con el proyecto, sus líneas de investigación, el equipo y la matriz de cobertura de la red.](../capturas/producto-1/inicio-proyecto-equipo.png)
 
 ![Serie mensual de precipitación de una estación con exportación CSV.](../capturas/producto-1/estacion-serie.png)
 
@@ -98,8 +99,6 @@ homogeneizadas y los resultados de la regionalización en las fases siguientes.
 ![Repositorio digital de documentos del proyecto.](../capturas/producto-1/repositorio.png)
 
 ![Grafo de conocimiento interactivo.](../capturas/producto-1/grafo-conocimiento.png)
-
-![Página del proyecto con líneas de investigación y equipo.](../capturas/producto-1/proyecto-equipo.png)
 
 ## 4. REFERENCIAS
 

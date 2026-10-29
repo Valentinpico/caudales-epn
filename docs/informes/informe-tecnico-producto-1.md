@@ -130,7 +130,7 @@ El backend sigue una **arquitectura por capas** con dependencias en un solo sent
 - **Infraestructura (`Infrastructure`):** encapsula la persistencia (Entity Framework
   Core), el analizador de los archivos del INAMHI y la carga masiva inicial.
 
-El frontend se organiza **por funcionalidades** (*features*): resumen, estaciones,
+El frontend se organiza **por funcionalidades** (*features*): inicio, estaciones,
 calidad de datos, repositorio y grafo; cada una agrupa sus componentes, y los elementos
 transversales (cliente de la API, formato numérico, controles comunes) residen en una
 carpeta compartida.
@@ -308,15 +308,20 @@ emplea una única familia tipográfica de ancho variable: en versión expandida 
 títulos y condensada para los códigos de estación y las tablas densas. Los gráficos se
 dibujan directamente en SVG, sin bibliotecas externas, lo que permite representar los
 vacíos del registro como vacíos y no como interpolaciones. La aplicación se organiza en
-seis secciones:
+cinco secciones:
 
-- **Resumen:** presenta el alcance de los datos y una **matriz de cobertura** de la red:
+- **Inicio:** es la portada del proyecto. Presenta el título y el propósito de la
+  plataforma, una banda de cifras (estaciones, período, registros, hallazgos de calidad,
+  líneas de investigación e investigadores), las cuatro **líneas de investigación**, el
+  **equipo** agrupado en dirección y colaboradores, con su rol, título e institución, una
+  **matriz de cobertura** de la red:
   cada fila es una estación, ordenada por el inicio de su registro, y cada columna un año;
   el tono indica la proporción de días con dato. En una sola imagen se observa el
   crecimiento de la red en las décadas de 1960 a 1980, los vacíos de cada estación y la
   disminución de registros en los últimos años. Al pasar el cursor se identifica la
-  estación y el año, y con un clic se abre su serie. Incluye además los cuatro objetivos
-  específicos del proyecto.
+  estación y el año, y con un clic se abre su serie; y, por último, los cuatro objetivos
+  específicos y los ODS. La información del proyecto se obtiene del grafo de conocimiento,
+  de modo que no existe una segunda fuente de datos que mantener.
 - **Estaciones:** lista buscable con el período y la completitud de cada estación; al
   seleccionarla se muestran sus indicadores, la serie mensual o diaria con marca de
   valores sospechosos, la matriz de completitud mes a mes, sus hallazgos de calidad y la
@@ -328,10 +333,6 @@ seis secciones:
 - **Grafo de conocimiento:** visualización interactiva con filtro por tipo de nodo y un
   panel de detalle que lista las relaciones del nodo seleccionado y permite navegar de un
   nodo a otro.
-- **Proyecto:** presenta el título y la descripción del proyecto, sus líneas de
-  investigación, el equipo con su rol e institución, los objetivos específicos y los ODS.
-  Su contenido se obtiene del grafo de conocimiento, de modo que no existe una segunda
-  fuente de datos que mantener.
 
 ### 3.8 Seguridad y administración
 
@@ -365,9 +366,10 @@ implementarlo. Las suites actuales son:
   mes y por año, resumen por estación, exportación CSV, validaciones del repositorio,
   almacenamiento y eliminación de archivos, y construcción, idempotencia y vecindad del
   grafo de conocimiento.
-- **Frontend (Vitest), 10 pruebas:** escala de colores de cobertura, cálculo de marcas
+- **Frontend (Vitest), 12 pruebas:** escala de colores de cobertura, cálculo de marcas
   de los ejes, años bisiestos y el algoritmo de disposición del grafo (límites,
-  determinismo y cercanía de nodos enlazados).
+  determinismo y cercanía de nodos enlazados) y la lectura del equipo y las líneas de
+  investigación desde el grafo.
 
 Las pruebas no dependen de servicios externos y se ejecutan en segundos.
 
@@ -402,11 +404,17 @@ El resultado del producto es un aplicativo web funcional que integra las series
 hidrometeorológicas del INAMHI con su control de calidad, el repositorio digital y el
 grafo de conocimiento del proyecto. A continuación se presentan sus vistas principales.
 
-### 4.1 Resumen y matriz de cobertura de la red
+### 4.1 Página de inicio: proyecto, equipo y cobertura de la red
 
-![Página de resumen: título, cifras de la base de datos y matriz de cobertura de precipitación por estación y año, 1960–2023.](../capturas/producto-1/resumen-cobertura.png)
+![Página de inicio: presentación del proyecto, cifras, líneas de investigación, equipo, matriz de cobertura de precipitación por estación y año (1960–2023), objetivos específicos y ODS.](../capturas/producto-1/inicio-proyecto-equipo.png)
 
-*Figura 3. Página de resumen con la matriz de cobertura de la red de precipitación.*
+*Figura 3. Página de inicio con el proyecto, su equipo y la matriz de cobertura de la red de precipitación.*
+
+La portada reúne la información institucional del proyecto: las cuatro líneas de
+investigación de los departamentos de Matemática e Ingeniería Civil y Ambiental y el
+equipo de cinco investigadores (directora, codirector y colaboradores de la EPN, la
+Universitat Jaume I y el INAMHI). Solo se publican nombre, rol, título e institución de
+cada integrante.
 
 La matriz de cobertura resume en una sola vista la disponibilidad de datos de las 106
 estaciones de precipitación a lo largo de 64 años. Es el diagnóstico de partida para el
@@ -465,18 +473,6 @@ El grafo integra de forma navegable los objetivos, actividades y métodos del pr
 con los datos, las estaciones, los documentos y el equipo. La vista permite ocultar o
 mostrar tipos de nodo (por defecto se ocultan las 106 estaciones para facilitar la
 lectura) y consultar las relaciones de cada nodo en el panel lateral.
-
-### 4.7 Proyecto, líneas de investigación y equipo
-
-![Página del proyecto: líneas de investigación, equipo con rol e institución, objetivos específicos y ODS.](../capturas/producto-1/proyecto-equipo.png)
-
-*Figura 9. Página del proyecto con sus líneas de investigación y equipo.*
-
-La página reúne la información institucional del proyecto: las cuatro líneas de
-investigación de los departamentos de Matemática e Ingeniería Civil y Ambiental, el
-equipo de cinco investigadores (directora, codirector y colaboradores de la EPN, la
-Universitat Jaume I y el INAMHI), los objetivos específicos y los ODS a los que
-contribuye. Solo se publican nombre, rol, título e institución de cada integrante.
 
 ## 5. Limitaciones y trabajo pendiente
 
@@ -573,7 +569,7 @@ docker compose up --build    # aplicativo en http://localhost:5174
 
 # Pruebas
 cd backend/tests && dotnet test     # 31 pruebas
-cd frontend && npm test             # 10 pruebas
+cd frontend && npm test             # 12 pruebas
 ```
 
 ### Anexo 4 — Repositorio
