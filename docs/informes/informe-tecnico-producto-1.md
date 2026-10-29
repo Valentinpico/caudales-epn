@@ -235,6 +235,10 @@ la propuesta aprobada:
 - **Equipo (5) e instituciones (4):** directora, codirector y colaboradores; EPN
   (Departamento de Matemática y Departamento de Ingeniería Civil y Ambiental), INAMHI y
   Universitat Jaume I.
+- **Líneas de investigación (4):** Modelización Estocástica Teórica y Aplicada
+  (LPI-DM-2023-04), Geografía y Paisaje (LI-DICA-2023-01), Hidrología, Hidrogeología y
+  Recursos Hídricos (LPI-DICA-2023-01) y Meteorología y Climatología Aplicada
+  (LI-DICA-2023-06).
 - **Objetivos de Desarrollo Sostenible (4):** ODS 6, 9, 13 y 17.
 - **Documentos iniciales del repositorio (2):** la postulación del proyecto y la
   descripción de los archivos crudos del INAMHI.
@@ -262,9 +266,11 @@ relaciones modeladas son:
 (Investigador)-[DIRIGE | CODIRIGE | COLABORA]->(Proyecto)
 (Investigador)-[PERTENECE_A]->(Institución)
 (Proyecto)-[CONTRIBUYE_A]->(ODS)
+(Proyecto)-[EN_LINEA]->(Línea de investigación)
+(Línea de investigación)-[DEFINIDA_POR]->(Institución)
 ```
 
-En su estado actual el grafo contiene **150 nodos y 411 relaciones**. Al ser una
+En su estado actual el grafo contiene **154 nodos y 419 relaciones**. Al ser una
 proyección, se **reconstruye automáticamente** al iniciar el sistema y ante cada alta o
 baja en el repositorio, por lo que nunca diverge de los datos: un documento nuevo
 asociado al OE2 aparece de inmediato enlazado a ese objetivo y, a través de él, a sus
@@ -272,7 +278,7 @@ actividades y métodos. La API expone el grafo completo y la vecindad de cualqui
 lo que permite recorrer preguntas como *¿qué métodos aplica el OE2?*, *¿qué estaciones
 registran temperatura?* o *¿qué documentos respaldan la homogeneización?*.
 
-![Esquema del grafo de conocimiento: Proyecto, Objetivo, Actividad, Método, Variable, Conjunto de datos, Estación, Documento, Investigador, Institución y ODS, con sus relaciones.](../diagramas/grafo-conocimiento.svg)
+![Esquema del grafo de conocimiento: Proyecto, Objetivo, Actividad, Método, Variable, Conjunto de datos, Estación, Documento, Investigador, Institución, ODS y Línea de investigación, con sus relaciones.](../diagramas/grafo-conocimiento.svg)
 
 *Figura 2. Tipos de nodo y relaciones del grafo de conocimiento.*
 
@@ -302,7 +308,7 @@ emplea una única familia tipográfica de ancho variable: en versión expandida 
 títulos y condensada para los códigos de estación y las tablas densas. Los gráficos se
 dibujan directamente en SVG, sin bibliotecas externas, lo que permite representar los
 vacíos del registro como vacíos y no como interpolaciones. La aplicación se organiza en
-cinco secciones:
+seis secciones:
 
 - **Resumen:** presenta el alcance de los datos y una **matriz de cobertura** de la red:
   cada fila es una estación, ordenada por el inicio de su registro, y cada columna un año;
@@ -322,6 +328,10 @@ cinco secciones:
 - **Grafo de conocimiento:** visualización interactiva con filtro por tipo de nodo y un
   panel de detalle que lista las relaciones del nodo seleccionado y permite navegar de un
   nodo a otro.
+- **Proyecto:** presenta el título y la descripción del proyecto, sus líneas de
+  investigación, el equipo con su rol e institución, los objetivos específicos y los ODS.
+  Su contenido se obtiene del grafo de conocimiento, de modo que no existe una segunda
+  fuente de datos que mantener.
 
 ### 3.8 Seguridad y administración
 
@@ -455,6 +465,18 @@ El grafo integra de forma navegable los objetivos, actividades y métodos del pr
 con los datos, las estaciones, los documentos y el equipo. La vista permite ocultar o
 mostrar tipos de nodo (por defecto se ocultan las 106 estaciones para facilitar la
 lectura) y consultar las relaciones de cada nodo en el panel lateral.
+
+### 4.7 Proyecto, líneas de investigación y equipo
+
+![Página del proyecto: líneas de investigación, equipo con rol e institución, objetivos específicos y ODS.](../capturas/producto-1/proyecto-equipo.png)
+
+*Figura 9. Página del proyecto con sus líneas de investigación y equipo.*
+
+La página reúne la información institucional del proyecto: las cuatro líneas de
+investigación de los departamentos de Matemática e Ingeniería Civil y Ambiental, el
+equipo de cinco investigadores (directora, codirector y colaboradores de la EPN, la
+Universitat Jaume I y el INAMHI), los objetivos específicos y los ODS a los que
+contribuye. Solo se publican nombre, rol, título e institución de cada integrante.
 
 ## 5. Limitaciones y trabajo pendiente
 
