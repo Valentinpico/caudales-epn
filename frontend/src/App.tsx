@@ -6,6 +6,7 @@ import { StationsPage } from "./features/stations/StationsPage";
 import { QualityPage } from "./features/quality/QualityPage";
 import { RepositoryPage } from "./features/repository/RepositoryPage";
 import { GraphPage } from "./features/graph/GraphPage";
+import { ProjectPage } from "./features/project/ProjectPage";
 
 const NAV = [
   { to: "/", label: "Resumen" },
@@ -13,6 +14,7 @@ const NAV = [
   { to: "/calidad", label: "Calidad de datos" },
   { to: "/repositorio", label: "Repositorio" },
   { to: "/grafo", label: "Grafo de conocimiento" },
+  { to: "/proyecto", label: "Proyecto" },
 ];
 
 function Mark() {
@@ -106,6 +108,7 @@ function Shell() {
           <Route path="/calidad" element={<QualityPage />} />
           <Route path="/repositorio" element={<RepositoryPage />} />
           <Route path="/grafo" element={<GraphPage />} />
+          <Route path="/proyecto" element={<ProjectPage />} />
         </Routes>
       </main>
       <footer className="border-t border-grid">

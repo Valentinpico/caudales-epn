@@ -63,6 +63,11 @@ public static class ProjectKnowledge
         new("institution:inamhi", "Institution", "INAMHI", "Instituto Nacional de Meteorología e Hidrología."),
         new("institution:uji", "Institution", "Universitat Jaume I (INIT)", "Institute of New Imaging Technologies, Castellón."),
 
+        new("line:LPI-DM-2023-04", "ResearchLine", "Modelización Estocástica Teórica y Aplicada", "LPI-DM-2023-04"),
+        new("line:LI-DICA-2023-01", "ResearchLine", "Geografía y Paisaje", "LI-DICA-2023-01"),
+        new("line:LPI-DICA-2023-01", "ResearchLine", "Hidrología, Hidrogeología y Recursos Hídricos", "LPI-DICA-2023-01"),
+        new("line:LI-DICA-2023-06", "ResearchLine", "Meteorología y Climatología Aplicada", "LI-DICA-2023-06"),
+
         new("sdg:6", "SDG", "ODS 6: Agua limpia y saneamiento"),
         new("sdg:9", "SDG", "ODS 9: Industria, innovación e infraestructura"),
         new("sdg:13", "SDG", "ODS 13: Acción por el clima"),
@@ -112,6 +117,15 @@ public static class ProjectKnowledge
         new("researcher:zapata", "institution:epn-dica", "PERTENECE_A"),
         new("researcher:mollineda", "institution:uji", "PERTENECE_A"),
         new("researcher:torres", "institution:inamhi", "PERTENECE_A"),
+
+        new(ProjectId, "line:LPI-DM-2023-04", "EN_LINEA"),
+        new(ProjectId, "line:LI-DICA-2023-01", "EN_LINEA"),
+        new(ProjectId, "line:LPI-DICA-2023-01", "EN_LINEA"),
+        new(ProjectId, "line:LI-DICA-2023-06", "EN_LINEA"),
+        new("line:LPI-DM-2023-04", "institution:epn-dm", "DEFINIDA_POR"),
+        new("line:LI-DICA-2023-01", "institution:epn-dica", "DEFINIDA_POR"),
+        new("line:LPI-DICA-2023-01", "institution:epn-dica", "DEFINIDA_POR"),
+        new("line:LI-DICA-2023-06", "institution:epn-dica", "DEFINIDA_POR"),
 
         new(ProjectId, "sdg:6", "CONTRIBUYE_A"),
         new(ProjectId, "sdg:9", "CONTRIBUYE_A"),

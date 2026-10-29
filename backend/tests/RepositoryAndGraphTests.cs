@@ -37,6 +37,8 @@ public class RepositoryAndGraphTests : IDisposable
         Assert.Contains(g.Edges, e => e.SourceId == "station:M0001" && e.TargetId == "variable:precipitation" && e.Relation == "REGISTRA");
         Assert.Contains(g.Edges, e => e.SourceId.StartsWith("document:") && e.TargetId == "objective:OE2" && e.Relation == "DOCUMENTA");
         Assert.Contains(g.Edges, e => e.SourceId == "researcher:uquillas" && e.Relation == "DIRIGE");
+        Assert.Contains(g.Edges, e => e.SourceId == "project:caudales" && e.TargetId == "line:LPI-DM-2023-04" && e.Relation == "EN_LINEA");
+        Assert.Contains(g.Edges, e => e.SourceId == "line:LPI-DM-2023-04" && e.TargetId == "institution:epn-dm" && e.Relation == "DEFINIDA_POR");
         Assert.DoesNotContain(g.Nodes, n => n.Id == "dataset:temperature"); // no temperature data loaded
     }
 

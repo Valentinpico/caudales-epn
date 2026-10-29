@@ -16,6 +16,7 @@ const KINDS: Record<string, { label: string; color: string }> = {
   Document: { label: "Documentos", color: "#A3412F" },
   Researcher: { label: "Investigadores", color: "#7A6A58" },
   Institution: { label: "Instituciones", color: "#4A5560" },
+  ResearchLine: { label: "Líneas de investigación", color: "#B5651D" },
   SDG: { label: "ODS", color: "#8AA33C" },
 };
 const LABELED = new Set(["Project", "Objective", "Method", "Variable", "Dataset", "Institution"]);
