@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# caudales — power and deploy the on-demand AWS box (created by deploy/aws/create.sh).
+#
+#   caudales up        start the instance and wait until https://<domain>/health answers
+#   caudales down      stop the instance (compute billing stops; disk + Elastic IP keep billing ~$5/mo)
+#   caudales status    state and URL
+#   caudales deploy    copy the repo (plus info/) to the box, build there, restart the stack
+#   caudales ssh [cmd] shell (or one command) on the box
+#
+# The box stops itself after 10 min of average CPU < 5 % (alarm caudales-demo-idle-stop).
+set -euo pipefail
+
+export AWS_REGION=us-east-1
+STATE="$HOME/.caudales-aws/state.env"
+KEY="$HOME/.caudales-aws/caudales-demo.pem"
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+[ -f "$STATE" ] || { echo "missing $STATE — run deploy/aws/create.sh first"; exit 1; }
+# shellcheck disable=SC1090
+source "$STATE"
+URL="https://$DOMAIN"
+SSH_OPTS=(-i "$KEY" -o StrictHostKeyChecking=accept-new -o ConnectTimeout=10)
+
+state() { aws ec2 describe-instances --instance-ids "$INSTANCE" --query 'Reservations[0].Instances[0].State.Name' --output text; }
+
+# SSH only from this machine's current IP; older entries are revoked.
+allow_my_ip() {
+  local ip; ip=$(curl -s https://checkip.amazonaws.com)
+  aws ec2 describe-security-groups --group-ids "$SG" \
+    --query "SecurityGroups[0].IpPermissions[?FromPort==\`22\`].IpRanges[].CidrIp" --output text | tr '\t' '\n' \
+    | { grep -v "^$ip/32$" || true; } | while read -r old; do
+        [ -n "$old" ] && [ "$old" != "None" ] && aws ec2 revoke-security-group-ingress --group-id "$SG" --protocol tcp --port 22 --cidr "$old" >/dev/null
+      done || true
+  aws ec2 authorize-security-group-ingress --group-id "$SG" --protocol tcp --port 22 --cidr "$ip/32" >/dev/null 2>&1 || true
+}
+
+remote() { ssh "${SSH_OPTS[@]}" "ubuntu@$IP" "$@"; }
+
+wait_healthy() {
+  echo -n "waiting for $URL/health "
+  for _ in $(seq 1 120); do
+    if curl -sf -m 5 "$URL/health" >/dev/null 2>&1; then echo " up"; return 0; fi
+    echo -n "."; sleep 5
+  done
+  echo " not healthy after 10 min — check: caudales ssh 'cd /opt/caudales && docker compose -f docker-compose.prod.yml logs --tail 50'"
+  return 1
+}
+
+start() {
+  if [ "$(state)" != "running" ]; then
+    aws ec2 start-instances --instance-ids "$INSTANCE" >/dev/null
+    aws ec2 wait instance-running --instance-ids "$INSTANCE"
+  fi
+  # Alarm actions only fire on a transition; a box started while the alarm sits in ALARM never stops.
+  aws cloudwatch set-alarm-state --alarm-name caudales-demo-idle-stop --state-value OK --state-reason "started" || true
+}
+
+case "${1:-status}" in
+  up)
+    start; echo "url: $URL"; wait_healthy ;;
+  down)
+    aws ec2 stop-instances --instance-ids "$INSTANCE" >/dev/null; echo "stopping $INSTANCE" ;;
+  status)
+    echo "state: $(state)"; echo "url:   $URL" ;;
+  deploy)
+    start; allow_my_ip
+    until remote "test -f /opt/caudales/.bootstrap-done" 2>/dev/null; do echo "waiting for first-boot setup..."; sleep 10; done
+    rsync -az --delete -e "ssh ${SSH_OPTS[*]}" \
+      --exclude .git --exclude node_modules --exclude bin --exclude obj --exclude dist \
+      --exclude .env --exclude odd --exclude docs --exclude .atl --exclude .playwright-mcp \
+      --exclude '*.tsbuildinfo' --exclude 'backend/data' --exclude 'backend/info' \
+      "$ROOT/" "ubuntu@$IP:/opt/caudales/"
+    # Secrets are generated on the box and never leave it.
+    remote "test -f /opt/caudales/.env" || remote "umask 077; cat > /opt/caudales/.env" <<EOF
+SITE_ADDRESS=$DOMAIN
+POSTGRES_PASSWORD=$(openssl rand -hex 24)
+ADMIN_PASSWORD=$(openssl rand -hex 12)
+EOF
+    remote "cd /opt/caudales && docker compose -f docker-compose.prod.yml up -d --build --remove-orphans && docker image prune -f >/dev/null"
+    wait_healthy ;;
+  ssh)
+    allow_my_ip; shift; remote "$@" ;;
+  *)
+    sed -n '2,9p' "$0"; exit 1 ;;
+esac

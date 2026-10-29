@@ -1,0 +1,15 @@
+# HTTPS (Let's Encrypt) + reverse proxy + static SPA. SITE_ADDRESS comes from docker-compose.prod.yml.
+{$SITE_ADDRESS} {
+	encode gzip
+
+	@api path /api/* /files/* /health
+	handle @api {
+		reverse_proxy backend:8080
+	}
+
+	handle {
+		root * /srv/web
+		try_files {path} /index.html
+		file_server
+	}
+}

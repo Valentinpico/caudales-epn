@@ -1,0 +1,72 @@
+# Production (one EC2). Caddy serves the built SPA, proxies the API and gets HTTPS automatically.
+# Up: docker compose -f docker-compose.prod.yml up -d --build
+services:
+  # One-shot SPA build. Empty VITE_API_URL = same origin; Caddy routes /api and /files.
+  web-build:
+    image: node:22
+    working_dir: /app
+    environment:
+      VITE_API_URL: ""
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - web_dist:/out
+    command: sh -c "npm ci && npm run build && rm -rf /out/* && cp -r dist/. /out/"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      web-build:
+        condition: service_completed_successfully
+      backend:
+        condition: service_started
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_ADDRESS: "${SITE_ADDRESS:?set SITE_ADDRESS in .env, e.g. 1-2-3-4.sslip.io}"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - web_dist:/srv/web:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=caudales;Username=caudales;Password=${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}"
+      Admin__Password: "${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}"
+      RawData__Dir: /app/info
+      Cors__Origin: "https://${SITE_ADDRESS}"
+    volumes:
+      - ./data:/app/data          # repository files (seed + uploads), served at /files
+      - ./info:/app/info:ro       # raw INAMHI exports
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: caudales
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}"
+      POSTGRES_DB: caudales
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U caudales"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  web_dist:
+  pgdata:
+  caddy_data:
+  caddy_config:
