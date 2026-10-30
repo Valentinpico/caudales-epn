@@ -19,7 +19,10 @@ soportado en base de datos.
 ## Cómo correr
 
 1. Copiar los archivos crudos del INAMHI en `info/`:
-   `INAMHI_precipitacion_CRUDA.csv` e `INAMHI_temperatura_CRUDA.csv`.
+   `INAMHI_precipitacion_CRUDA.csv`, `INAMHI_temperatura_CRUDA.csv` y
+   `caudales_rellenos.xlsx` (caudal diario: crudo, observado, Hydraccess, simulado y final con flags).
+   Cada fuente se carga al arrancar solo si sus variables están vacías; para recargar una versión
+   nueva del libro de caudales: `DELETE FROM observations WHERE "Variable" LIKE 'Discharge%';` y reiniciar.
 2. `cp env.example .env` y definir `ADMIN_PASSWORD`.
 3. `docker compose up --build`
 

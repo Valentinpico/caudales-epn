@@ -112,7 +112,7 @@ function StationDetail({ summaries, variable }: { summaries: StationSummary[]; v
         <p className="text-sm text-muted">
           {station.latitude !== null
             ? `Lat. ${formatDec(station.latitude)}, long. ${formatDec(station.longitude!)}, ${formatInt(station.altitude ?? 0)} m s. n. m.${station.province ? `, ${station.province}` : ""}`
-            : "Coordenadas pendientes: los archivos crudos del INAMHI solo incluyen código y nombre de la estación."}
+            : "Coordenadas pendientes: los archivos de origen del INAMHI no incluyen la ubicación de la estación."}
         </p>
         <VariableToggle
           value={variable}

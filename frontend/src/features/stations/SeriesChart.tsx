@@ -1,16 +1,16 @@
 import { useMemo, useState } from "react";
 import type { SeriesPoint, Variable } from "../../shared/api";
-import { formatDec, niceTicks, unit } from "../../shared/format";
+import { formatDec, isDischarge, niceTicks, originLabel, unit } from "../../shared/format";
 
 const W = 900;
 const H = 280;
 const PAD = { l: 44, r: 12, t: 12, b: 26 };
 
-const color: Record<Variable, string> = { precipitation: "#1F6F8B", temperature: "#A8742A" };
+const lineColor = (v: Variable) => (v === "temperature" ? "#A8742A" : "#2E8A6B");
 
 /**
- * Hand-drawn SVG chart: precipitation as columns (it accumulates), temperature as a
- * line. Suspect values are ringed. Gaps in the record stay as gaps.
+ * Hand-drawn SVG chart: precipitation as columns (it accumulates), temperature and
+ * streamflow as a line. Suspect values are ringed. Gaps in the record stay as gaps.
  */
 export function SeriesChart({ points, variable, monthly }: { points: SeriesPoint[]; variable: Variable; monthly: boolean }) {
   const [hover, setHover] = useState<number | null>(null);
@@ -21,7 +21,7 @@ export function SeriesChart({ points, variable, monthly }: { points: SeriesPoint
     const t0 = t[0];
     const t1 = t[t.length - 1] + (monthly ? 30 : 1) * 864e5;
     const values = points.map((p) => p.value);
-    const yMin = variable === "precipitation" ? 0 : Math.floor(Math.min(...values));
+    const yMin = variable === "temperature" ? Math.floor(Math.min(...values)) : 0;
     const yTicks = niceTicks(yMin, Math.max(...values));
     const yMax = yTicks[yTicks.length - 1];
     const x = (ms: number) => PAD.l + ((ms - t0) / (t1 - t0)) * (W - PAD.l - PAD.r);
@@ -63,13 +63,15 @@ export function SeriesChart({ points, variable, monthly }: { points: SeriesPoint
       <p className="num h-6 text-sm" aria-live="polite">
         {h ? (
           <>
-            <strong>{monthly ? h.date.slice(0, 7) : h.date}</strong>: {formatDec(h.value)} {unit[variable]}
+            <strong>{monthly ? h.date.slice(0, 7) : h.date}</strong>: {formatDec(h.value)} {unit(variable)}
+            {h.origin && <span className="text-muted">, origen: {originLabel[h.origin] ?? h.origin}</span>}
             {monthly && <span className="text-muted"> ({h.days} días con dato)</span>}
             {h.suspect && <span className="text-ochre">, valor sospechoso</span>}
           </>
         ) : (
           <span className="text-muted">
-            {monthly ? (variable === "precipitation" ? "Acumulado mensual" : "Media mensual") : "Valores diarios"} en {unit[variable]}
+            {monthly ? (variable === "precipitation" ? "Acumulado mensual" : "Media mensual") : "Valores diarios"} en {unit(variable)}
+            {variable === "dischargeFinal" && (monthly ? "; cambie a diaria para ver el origen de cada dato" : "; pase el cursor para ver el origen de cada dato")}
           </span>
         )}
       </p>
@@ -91,12 +93,12 @@ export function SeriesChart({ points, variable, monthly }: { points: SeriesPoint
         {variable === "precipitation" ? (
           points.map((p, i) => (
             <rect key={p.date} x={x(t[i])} y={y(p.value)} width={barW} height={Math.max(0, y(0) - y(p.value))}
-              fill={p.suspect ? "#A8742A" : color.precipitation} />
+              fill={p.suspect ? "#A8742A" : "#1F6F8B"} />
           ))
         ) : (
-          <path d={path} fill="none" stroke={color.temperature} strokeWidth={monthly ? 1.4 : 0.8} />
+          <path d={path} fill="none" stroke={lineColor(variable)} strokeWidth={monthly ? 1.4 : 0.8} />
         )}
-        {variable === "temperature" &&
+        {(variable === "temperature" || isDischarge(variable)) &&
           points.map((p, i) =>
             p.suspect ? <circle key={p.date} cx={x(t[i])} cy={y(p.value)} r={3} fill="none" stroke="#A3412F" strokeWidth={1.2} /> : null
           )}

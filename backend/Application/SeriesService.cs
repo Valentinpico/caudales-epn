@@ -12,7 +12,7 @@ public record StationSummary(
     DateOnly First, DateOnly Last, double Completeness, int Suspect, int Issues,
     double? Latitude, double? Longitude, double? Altitude, string? Province);
 
-public record SeriesPoint(DateOnly Date, double Value, int Days, bool Suspect);
+public record SeriesPoint(DateOnly Date, double Value, int Days, bool Suspect, string? Origin = null);
 public record MonthCoverage(int Year, int Month, int Days, int DaysInMonth);
 public record YearCoverage(string Code, int Year, int Days);
 public record IssueCount(Variable Variable, string Kind, int Count);
@@ -72,10 +72,10 @@ public class SeriesService(AppDbContext db)
 
         if (resolution == "daily")
             return await q.OrderBy(o => o.Date)
-                .Select(o => new SeriesPoint(o.Date, o.Value, 1, o.Suspect))
+                .Select(o => new SeriesPoint(o.Date, o.Value, 1, o.Suspect, o.Origin))
                 .ToListAsync();
 
-        // Monthly: precipitation accumulates, temperature averages.
+        // Monthly: precipitation accumulates, temperature and discharge average.
         var months = await q.GroupBy(o => new { o.Date.Year, o.Date.Month })
             .Select(g => new
             {
@@ -133,11 +133,16 @@ public class SeriesService(AppDbContext db)
     public async Task<string> ExportCsvAsync(string code, Variable variable)
     {
         var rows = await GetSeriesAsync(code, variable, "daily", null, null);
-        var sb = new StringBuilder("codigo,fecha,valor,sospechoso\n");
+        var withOrigin = variable == Variable.DischargeFinal;
+        var sb = new StringBuilder(withOrigin ? "codigo,fecha,valor,sospechoso,origen\n" : "codigo,fecha,valor,sospechoso\n");
         foreach (var r in rows)
+        {
             sb.Append(code).Append(',').Append(r.Date.ToString("yyyy-MM-dd")).Append(',')
               .Append(r.Value.ToString(CultureInfo.InvariantCulture)).Append(',')
-              .Append(r.Suspect ? "true" : "false").Append('\n');
+              .Append(r.Suspect ? "true" : "false");
+            if (withOrigin) sb.Append(',').Append(r.Origin);
+            sb.Append('\n');
+        }
         return sb.ToString();
     }
 

@@ -35,6 +35,8 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.EnsureCreatedAsync();
+    // ponytail: EnsureCreated never alters an existing table; columns added later go here.
+    await db.Database.ExecuteSqlRawAsync("ALTER TABLE observations ADD COLUMN IF NOT EXISTS \"Origin\" text");
     await DataSeeder.SeedAsync(db, rawDir, dataRoot, app.Logger);
     await scope.ServiceProvider.GetRequiredService<KnowledgeGraphService>().RebuildAsync();
 }

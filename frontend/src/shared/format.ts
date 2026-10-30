@@ -11,9 +11,33 @@ export const year = (isoDate: string) => isoDate.slice(0, 4);
 export const variableLabel: Record<Variable, string> = {
   precipitation: "Precipitación",
   temperature: "Temperatura",
+  dischargeRaw: "Caudal crudo",
+  dischargeObserved: "Caudal observado",
+  dischargeHydraccess: "Caudal Hydraccess",
+  dischargeSimulated: "Caudal simulado",
+  dischargeFinal: "Caudal final",
 };
 
-export const unit: Record<Variable, string> = { precipitation: "mm", temperature: "°C" };
+/** Short label of each streamflow processing stage, for the series selector. */
+export const dischargeSeriesLabel: Record<string, string> = {
+  dischargeRaw: "Crudo INAMHI",
+  dischargeObserved: "Observado (Climatol)",
+  dischargeHydraccess: "Hydraccess",
+  dischargeSimulated: "Simulado (GR4J/GR6J)",
+  dischargeFinal: "Final con flags",
+};
+
+export const originLabel: Record<string, string> = {
+  H: "Hydraccess",
+  GR4J: "modelo GR4J",
+  GR6J: "modelo GR6J",
+  RPA: "relleno por proporción de áreas",
+  PDM: "promedio diario multianual",
+};
+
+export const isDischarge = (v: Variable) => v.startsWith("discharge");
+
+export const unit = (v: Variable) => (v === "precipitation" ? "mm" : v === "temperature" ? "°C" : "m³/s");
 
 export const monthNames = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 

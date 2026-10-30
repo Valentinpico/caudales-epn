@@ -1,3 +1,4 @@
+using System.Text.Json;
 using CaudalesPlatform.Api.Application;
 using CaudalesPlatform.Api.Domain.Entities;
 using CaudalesPlatform.Api.Shared;
@@ -56,10 +57,13 @@ public static class Endpoints
     }
 
     private static Variable Parse(string value) =>
-        ParseOptional(value) ?? throw new ValidationError("La variable debe ser 'precipitation' o 'temperature'.");
+        ParseOptional(value) ?? throw new ValidationError(InvalidVariable);
 
     private static Variable? ParseOptional(string? value) =>
         value is null ? null
         : Enum.TryParse<Variable>(value, ignoreCase: true, out var v) ? v
-        : throw new ValidationError("La variable debe ser 'precipitation' o 'temperature'.");
+        : throw new ValidationError(InvalidVariable);
+
+    private static readonly string InvalidVariable =
+        $"La variable debe ser una de: {string.Join(", ", Enum.GetNames<Variable>().Select(JsonNamingPolicy.CamelCase.ConvertName))}.";
 }

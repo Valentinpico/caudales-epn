@@ -1,6 +1,14 @@
 export const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8081";
 
-export type Variable = "precipitation" | "temperature";
+export const DISCHARGE_SERIES = [
+  "dischargeRaw",
+  "dischargeObserved",
+  "dischargeHydraccess",
+  "dischargeSimulated",
+  "dischargeFinal",
+] as const;
+
+export type Variable = "precipitation" | "temperature" | (typeof DISCHARGE_SERIES)[number];
 
 export interface StationSummary {
   code: string;
@@ -23,6 +31,8 @@ export interface SeriesPoint {
   value: number;
   days: number;
   suspect: boolean;
+  /** dischargeFinal, daily only: H, GR4J, GR6J, RPA or PDM. */
+  origin: string | null;
 }
 
 export interface MonthCoverage {

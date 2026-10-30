@@ -7,9 +7,9 @@ using NpgsqlTypes;
 namespace CaudalesPlatform.Api.Infrastructure;
 
 /// <summary>
-/// First-run load: parses the raw INAMHI files, bulk-inserts the daily observations
-/// with PostgreSQL binary COPY (~2M rows) and registers the seed documents.
-/// Runs only when the tables are empty, so restarts are cheap.
+/// First-run load: parses the raw INAMHI files and the streamflow workbook, bulk-inserts
+/// the daily observations with PostgreSQL binary COPY (~5M rows) and registers the seed
+/// documents. Each source loads only while its variables are empty, so restarts are cheap.
 /// </summary>
 public static class DataSeeder
 {
@@ -21,7 +21,9 @@ public static class DataSeeder
 
     public static async Task SeedAsync(AppDbContext db, string rawDir, string dataRoot, ILogger log)
     {
-        if (!await db.Observations.AnyAsync()) await LoadSeriesAsync(db, rawDir, log);
+        if (!await db.Observations.AnyAsync(o => o.Variable == Variable.Precipitation || o.Variable == Variable.Temperature))
+            await LoadSeriesAsync(db, rawDir, log);
+        await LoadDischargeAsync(db, Path.Combine(rawDir, DischargeWorkbook.FileName), log);
         await ApplyStationMetadataAsync(db, Path.Combine(dataRoot, "estaciones.csv"), log);
         if (!await db.Documents.AnyAsync()) await SeedDocumentsAsync(db);
     }
@@ -55,15 +57,43 @@ public static class DataSeeder
         }
     }
 
-    private static async Task CopyObservationsAsync(AppDbContext db, List<Observation> rows)
+    // ponytail: loads a sheet only while its variable is empty; a new workbook version needs
+    // `DELETE FROM observations WHERE "Variable" LIKE 'Discharge%'` before restarting.
+    private static async Task LoadDischargeAsync(AppDbContext db, string path, ILogger log)
+    {
+        if (!File.Exists(path))
+        {
+            log.LogWarning("Discharge workbook not found: {Path}", path);
+            return;
+        }
+
+        foreach (var (sheet, variable) in DischargeWorkbook.Sheets)
+        {
+            if (await db.Observations.AnyAsync(o => o.Variable == variable)) continue;
+
+            var known = await db.Stations.Select(s => s.Code).ToHashSetAsync();
+            var codes = DischargeWorkbook.StationCodes(DischargeWorkbook.ReadSheet(path, sheet));
+            db.Stations.AddRange(codes.Where(c => !known.Contains(c))
+                .Select(c => new Station { Code = c, Name = "Estación hidrológica" }));
+            await db.SaveChangesAsync();
+
+            var count = await CopyObservationsAsync(db,
+                DischargeWorkbook.Parse(DischargeWorkbook.ReadSheet(path, sheet), variable));
+            log.LogInformation("{Sheet}: {Obs} observations", sheet, count);
+        }
+    }
+
+    private static async Task<int> CopyObservationsAsync(AppDbContext db, IEnumerable<Observation> rows)
     {
         var conn = (NpgsqlConnection)db.Database.GetDbConnection();
         if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync();
 
         await using var w = await conn.BeginBinaryImportAsync(
-            "COPY observations (\"StationCode\", \"Variable\", \"Date\", \"Value\", \"Suspect\", \"SourceLine\") FROM STDIN (FORMAT BINARY)");
+            "COPY observations (\"StationCode\", \"Variable\", \"Date\", \"Value\", \"Suspect\", \"SourceLine\", \"Origin\") FROM STDIN (FORMAT BINARY)");
+        var count = 0;
         foreach (var o in rows)
         {
+            count++;
             await w.StartRowAsync();
             await w.WriteAsync(o.StationCode, NpgsqlDbType.Text);
             await w.WriteAsync(o.Variable.ToString(), NpgsqlDbType.Text);
@@ -71,8 +101,10 @@ public static class DataSeeder
             await w.WriteAsync(o.Value, NpgsqlDbType.Double);
             await w.WriteAsync(o.Suspect, NpgsqlDbType.Boolean);
             await w.WriteAsync(o.SourceLine, NpgsqlDbType.Integer);
+            await w.WriteAsync(o.Origin, NpgsqlDbType.Text);
         }
         await w.CompleteAsync();
+        return count;
     }
 
     /// <summary>Optional data/estaciones.csv: codigo,latitud,longitud,altitud,provincia.</summary>

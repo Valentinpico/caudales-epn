@@ -1,6 +1,11 @@
 namespace CaudalesPlatform.Api.Domain.Entities;
 
-public enum Variable { Precipitation, Temperature }
+public enum Variable
+{
+    Precipitation, Temperature,
+    // Streamflow (m³/s), one series per processing stage of caudales_rellenos.xlsx.
+    DischargeRaw, DischargeObserved, DischargeHydraccess, DischargeSimulated, DischargeFinal,
+}
 
 /// <summary>INAMHI station. Coordinates are optional: the raw files only carry code and name.</summary>
 public class Station
@@ -13,7 +18,7 @@ public class Station
     public string? Province { get; set; }
 }
 
-/// <summary>One daily value. SourceLine points back to the row of the raw INAMHI file.</summary>
+/// <summary>One daily value. SourceLine points back to the row of the source file (CSV line or sheet row).</summary>
 public class Observation
 {
     public string StationCode { get; set; } = "";
@@ -22,6 +27,8 @@ public class Observation
     public double Value { get; set; }
     public bool Suspect { get; set; }
     public int SourceLine { get; set; }
+    /// <summary>DischargeFinal only: where the value comes from (H, GR4J, GR6J, RPA, PDM).</summary>
+    public string? Origin { get; set; }
 }
 
 public static class IssueKind

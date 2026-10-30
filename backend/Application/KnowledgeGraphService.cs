@@ -15,10 +15,15 @@ public record Neighborhood(GraphNode Node, List<GraphNode> Neighbors, List<Graph
 /// </summary>
 public class KnowledgeGraphService(AppDbContext db)
 {
-    private static readonly (Variable Variable, string Slug, string Label)[] Datasets =
+    private static readonly (Variable Variable, string Slug, string VariableSlug, string Activity, string Label)[] Datasets =
     [
-        (Variable.Precipitation, "precipitation", "Precipitación diaria INAMHI (cruda)"),
-        (Variable.Temperature, "temperature", "Temperatura diaria INAMHI (cruda)"),
+        (Variable.Precipitation, "precipitation", "precipitation", "A1.1", "Precipitación diaria INAMHI (cruda)"),
+        (Variable.Temperature, "temperature", "temperature", "A1.1", "Temperatura diaria INAMHI (cruda)"),
+        (Variable.DischargeRaw, "discharge-raw", "discharge", "A2.1", "Caudal diario INAMHI (crudo, 1962–2015)"),
+        (Variable.DischargeObserved, "discharge-observed", "discharge", "A2.1", "Caudal observado procesado con Climatol (1985–2015)"),
+        (Variable.DischargeHydraccess, "discharge-hydraccess", "discharge", "A2.1", "Caudal analizado con Hydraccess (1985–2015)"),
+        (Variable.DischargeSimulated, "discharge-simulated", "discharge", "A2.3", "Caudal simulado con GR4J/GR6J (1985–2015)"),
+        (Variable.DischargeFinal, "discharge-final", "discharge", "A2.3", "Caudal final rellenado con flags de origen (1985–2015)"),
     ];
 
     public async Task RebuildAsync()
@@ -36,7 +41,7 @@ public class KnowledgeGraphService(AppDbContext db)
             .Select(o => new { o.StationCode, o.Variable }).Distinct().ToListAsync();
         var stations = await db.Stations.ToListAsync();
 
-        foreach (var (variable, slug, label) in Datasets)
+        foreach (var (variable, slug, variableSlug, activity, label) in Datasets)
         {
             var codes = stationVariables.Where(x => x.Variable == variable).Select(x => x.StationCode).ToHashSet();
             if (codes.Count == 0) continue;
@@ -44,13 +49,13 @@ public class KnowledgeGraphService(AppDbContext db)
             var datasetId = $"dataset:{slug}";
             nodes.Add(new GraphNode { Id = datasetId, Kind = "Dataset", Label = label,
                 Description = $"{codes.Count} estaciones. Fuente: INAMHI." });
-            edges.Add((datasetId, $"variable:{slug}", "MIDE"));
+            edges.Add((datasetId, $"variable:{variableSlug}", "MIDE"));
             edges.Add((datasetId, "institution:inamhi", "PROVISTO_POR"));
-            edges.Add((datasetId, "activity:A1.1", "INSUMO_DE"));
+            edges.Add((datasetId, $"activity:{activity}", "INSUMO_DE"));
             foreach (var code in codes)
             {
                 edges.Add((datasetId, $"station:{code}", "CONTIENE"));
-                edges.Add(($"station:{code}", $"variable:{slug}", "REGISTRA"));
+                edges.Add(($"station:{code}", $"variable:{variableSlug}", "REGISTRA"));
             }
         }
 

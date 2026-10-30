@@ -50,7 +50,7 @@ public static class ProjectKnowledge
 
         new("variable:precipitation", "Variable", "Precipitación", "Precipitación diaria (mm)."),
         new("variable:temperature", "Variable", "Temperatura", "Temperatura diaria (°C)."),
-        new("variable:discharge", "Variable", "Caudal", "Caudal (m³/s). Datos por levantar (OE2)."),
+        new("variable:discharge", "Variable", "Caudal", "Caudal diario (m³/s) de las estaciones hidrológicas del INAMHI."),
 
         new("researcher:uquillas", "Researcher", "Adriana Uquillas Andrade", "Directora. Doctora en Ciencias."),
         new("researcher:flores", "Researcher", "Miguel Alfonso Flores Sánchez", "Codirector. Doctor en Estadística e Investigación Operativa."),

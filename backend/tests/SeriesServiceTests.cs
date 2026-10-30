@@ -17,11 +17,12 @@ public class SeriesServiceTests
         return db;
     }
 
-    private static void Add(AppDbContext db, Variable v, string date, double value, bool suspect = false)
+    private static void Add(AppDbContext db, Variable v, string date, double value, bool suspect = false, string? origin = null)
     {
         db.Observations.Add(new Observation
         {
             StationCode = "M0001", Variable = v, Date = DateOnly.Parse(date), Value = value, Suspect = suspect,
+            Origin = origin,
         });
         db.SaveChanges();
     }
@@ -133,5 +134,34 @@ public class SeriesServiceTests
         var c = await new SeriesService(db).GetCoverageAsync(Variable.Precipitation);
 
         Assert.Equal([("M0001", 1970, 2), ("M0001", 1971, 1)], c.Select(x => (x.Code, x.Year, x.Days)));
+    }
+
+    [Fact]
+    public async Task Monthly_discharge_is_the_mean_and_daily_final_carries_its_origin()
+    {
+        var db = Db();
+        Add(db, Variable.DischargeFinal, "1985-01-01", 2.0, origin: "H");
+        Add(db, Variable.DischargeFinal, "1985-01-02", 4.0, origin: "GR6J");
+        var s = new SeriesService(db);
+
+        var monthly = await s.GetSeriesAsync("M0001", Variable.DischargeFinal, "monthly", null, null);
+        var daily = await s.GetSeriesAsync("M0001", Variable.DischargeFinal, "daily", null, null);
+
+        Assert.Equal([3.0], monthly.Select(p => p.Value));
+        Assert.Equal(["H", "GR6J"], daily.Select(p => p.Origin));
+    }
+
+    [Fact]
+    public async Task Export_adds_origin_column_only_for_final_discharge()
+    {
+        var db = Db();
+        Add(db, Variable.Precipitation, "1970-01-01", 2.0);
+        Add(db, Variable.DischargeFinal, "1985-01-01", 4.5, origin: "RPA");
+        var s = new SeriesService(db);
+
+        Assert.Equal("codigo,fecha,valor,sospechoso\nM0001,1970-01-01,2,false\n",
+            await s.ExportCsvAsync("M0001", Variable.Precipitation));
+        Assert.Equal("codigo,fecha,valor,sospechoso,origen\nM0001,1985-01-01,4.5,false,RPA\n",
+            await s.ExportCsvAsync("M0001", Variable.DischargeFinal));
     }
 }
