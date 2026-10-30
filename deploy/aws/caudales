@@ -69,7 +69,7 @@ case "${1:-status}" in
     until remote "test -f /opt/caudales/.bootstrap-done" 2>/dev/null; do echo "waiting for first-boot setup..."; sleep 10; done
     rsync -az --delete -e "ssh ${SSH_OPTS[*]}" \
       --exclude .git --exclude node_modules --exclude bin --exclude obj --exclude dist \
-      --exclude .env --exclude odd --exclude docs --exclude .atl --exclude .playwright-mcp \
+      --exclude .env --exclude .bootstrap-done --exclude odd --exclude docs --exclude .atl --exclude .playwright-mcp \
       --exclude '*.tsbuildinfo' --exclude 'backend/data' --exclude 'backend/info' \
       "$ROOT/" "ubuntu@$IP:/opt/caudales/"
     # Secrets are generated on the box and never leave it.
