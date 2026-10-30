@@ -62,6 +62,9 @@ case "${1:-status}" in
   status)
     echo "state: $(state)"; echo "url:   $URL" ;;
   deploy)
+    # The idle alarm would stop the box mid-deploy (upload and first-run load keep CPU low).
+    aws cloudwatch disable-alarm-actions --alarm-names caudales-demo-idle-stop
+    trap 'aws cloudwatch enable-alarm-actions --alarm-names caudales-demo-idle-stop' EXIT
     start; allow_my_ip
     until remote "test -f /opt/caudales/.bootstrap-done" 2>/dev/null; do echo "waiting for first-boot setup..."; sleep 10; done
     rsync -az --delete -e "ssh ${SSH_OPTS[*]}" \
