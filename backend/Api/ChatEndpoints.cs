@@ -19,12 +19,17 @@ public static class ChatEndpoints
     {
         var g = app.MapGroup("/api/chat");
 
-        g.MapGet("/health", async (RagOptions o, IChunkStore store, CorpusService corpus, CancellationToken ct) =>
+        g.MapGet("/health", async (RagOptions o, IChunkStore store, CorpusService corpus, ILogger<CorpusService> log,
+            CancellationToken ct) =>
         {
             IndexState? state = null;
-            string? error = corpus.LastError;
+            var failed = corpus.LastError is not null;
             try { state = await store.GetStateAsync(ct); }
-            catch (Exception e) when (e is not OperationCanceledException) { error ??= e.Message; }
+            catch (Exception e) when (e is not OperationCanceledException)
+            {
+                failed = true;
+                log.LogError(e, "No se pudo leer el estado del índice RAG");
+            }
             return Results.Ok(new
             {
                 provider = o.Provider.ToLowerInvariant(),
@@ -37,7 +42,8 @@ public static class ChatEndpoints
                 minScore = o.MinScore,
                 topK = o.TopK,
                 sessionTtlMinutes = o.SessionTtlMinutes,
-                lastError = error,
+                // Public endpoint: provider and database messages (IAM ARNs, hosts) stay in the logs.
+                lastError = failed ? "El índice documental no está disponible. Revise los registros del servidor." : null,
             });
         });
 
