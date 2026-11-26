@@ -79,6 +79,9 @@ public static class ChatEndpoints
                     }
                 }
             }
+            // The client left (Detener, closed tab): the SDK may wrap that cancellation in its own
+            // exception type, which is not a failure worth an error log.
+            catch (Exception) when (ct.IsCancellationRequested) { }
             catch (Exception e) when (e is not OperationCanceledException)
             {
                 ctx.RequestServices.GetRequiredService<ILogger<ChatService>>().LogError(e, "Falló la respuesta del asistente");
