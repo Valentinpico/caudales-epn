@@ -24,6 +24,10 @@ public partial class CorpusService(
     [GeneratedRegex(@"^\s*<!--\s*source:\s*(?<url>\S+)\s*-->", RegexOptions.Multiline)]
     private static partial Regex SourceComment();
 
+    /// <summary>Files about the assistant itself (e.g. its evaluation) opt out of the corpus with this comment.</summary>
+    [GeneratedRegex(@"^\s*<!--\s*rag:\s*exclude\s*-->", RegexOptions.Multiline)]
+    private static partial Regex ExcludeComment();
+
     [GeneratedRegex(@"^#\s+(?<title>.+?)\s*$", RegexOptions.Multiline)]
     private static partial Regex FirstH1();
 
@@ -84,7 +88,7 @@ public partial class CorpusService(
         return Convert.ToHexString(sha.GetHashAndReset());
     }
 
-    /// <summary>Every *.md under the roots, sorted for a stable fingerprint. DocId is the file name.</summary>
+    /// <summary>Every *.md under the roots (except opted-out files), sorted for a stable fingerprint. DocId is the file name.</summary>
     public static List<CorpusDoc> ReadMarkdown(IEnumerable<string> roots)
     {
         var docs = new List<CorpusDoc>();
@@ -92,6 +96,7 @@ public partial class CorpusService(
         foreach (var file in Directory.EnumerateFiles(root, "*.md", SearchOption.AllDirectories).Order(StringComparer.Ordinal))
         {
             var text = File.ReadAllText(file);
+            if (ExcludeComment().IsMatch(text)) continue;
             var docId = Path.GetFileNameWithoutExtension(file);
             var title = FirstH1().Match(text) is { Success: true } m ? m.Groups["title"].Value : docId;
             var url = SourceComment().Match(text) is { Success: true } s ? s.Groups["url"].Value : null;

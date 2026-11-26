@@ -1,3 +1,4 @@
+<!-- rag: exclude -->
 # Evaluación del asistente documental (Producto 3)
 
 > Evaluación de punta a punta del asistente de consulta documental del proyecto PISF-25-03:

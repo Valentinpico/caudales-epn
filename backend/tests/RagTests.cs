@@ -352,6 +352,7 @@ public class CorpusServiceTests : IDisposable
         File.WriteAllText(Path.Combine(_root, "sub", "propuesta.md"),
             "<!-- source: /files/documentos/propuesta/p.pdf -->\n# Postulación\n\ntexto");
         File.WriteAllText(Path.Combine(_root, "sin-titulo.md"), "solo texto");
+        File.WriteAllText(Path.Combine(_root, "evaluacion.md"), "<!-- rag: exclude -->\n# Evaluación\n\ncapital de Francia");
 
         var docs = CorpusService.ReadMarkdown([_root, Path.Combine(_root, "no-existe")]);
 
