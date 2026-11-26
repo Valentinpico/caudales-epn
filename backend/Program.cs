@@ -56,8 +56,12 @@ builder.Services.AddRateLimiter(o =>
 builder.Services.Configure<ForwardedHeadersOptions>(o =>
 {
     o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    // Only the reverse proxy on the private container network may set the client IP; a spoofed
+    // X-Forwarded-For sent straight to Kestrel is ignored, so the per-IP rate limit holds.
     o.KnownNetworks.Clear();
     o.KnownProxies.Clear();
+    foreach (var net in new[] { "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "127.0.0.0/8" })
+        o.KnownNetworks.Add(Microsoft.AspNetCore.HttpOverrides.IPNetwork.Parse(net));
 });
 builder.Services.AddProblemDetails();
 
