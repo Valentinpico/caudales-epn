@@ -397,6 +397,18 @@ public class SessionFileServiceTests
     }
 
     [Fact]
+    public async Task Rejects_binary_content_renamed_as_text_before_embedding()
+    {
+        var s = Service();
+        await Assert.ThrowsAsync<ValidationError>(() =>
+            s.IngestAsync("sesion-123", "a.txt", new MemoryStream([0x50, 0x4B, 0x03, 0x04, 0xFF, 0xFE, 0x00, 0x9C]), default));
+        await Assert.ThrowsAsync<ValidationError>(() =>
+            s.IngestAsync("sesion-123", "a.md", new MemoryStream([0x61, 0x00, 0x62]), default));
+        Assert.Empty(_embedder.Calls);
+        Assert.Empty(_store.Sessions);
+    }
+
+    [Fact]
     public async Task Purge_removes_chunks_older_than_the_ttl()
     {
         await Service().PurgeExpiredAsync(default);

@@ -36,7 +36,7 @@ public partial class SessionFileService(IEmbedder embedder, IChunkStore store, R
         if (buffer.Length > options.MaxUploadBytes)
             throw new ValidationError($"El archivo supera el tamaño máximo permitido ({options.MaxUploadBytes / (1024 * 1024)} MB).");
 
-        var text = ext == ".pdf" ? ExtractPdf(buffer.ToArray()) : Encoding.UTF8.GetString(buffer.ToArray());
+        var text = ext == ".pdf" ? ExtractPdf(buffer.ToArray()).Replace("\0", "") : DecodeText(buffer.ToArray());
         var title = Path.GetFileNameWithoutExtension(name);
         var pieces = MarkdownChunker.Chunk(text, title);
         if (pieces.Count == 0) throw new ValidationError("No se pudo extraer texto del archivo.");
@@ -58,6 +58,21 @@ public partial class SessionFileService(IEmbedder embedder, IChunkStore store, R
     /// <summary>Deletes every session chunk uploaded more than the TTL ago.</summary>
     public Task<int> PurgeExpiredAsync(CancellationToken ct) =>
         store.PurgeSessionsOlderThanAsync(clock.GetUtcNow().AddMinutes(-options.SessionTtlMinutes), ct);
+
+    private static readonly UTF8Encoding StrictUtf8 = new(encoderShouldEmitUTF8Identifier: false, throwOnInvalidBytes: true);
+
+    /// <summary>
+    /// .md and .txt must really be UTF-8 text: a binary file renamed to .txt is rejected before
+    /// it is embedded (and before PostgreSQL refuses its NUL bytes).
+    /// </summary>
+    private static string DecodeText(byte[] bytes)
+    {
+        string text;
+        try { text = StrictUtf8.GetString(bytes); }
+        catch (DecoderFallbackException) { throw new ValidationError("El archivo no es texto UTF-8 válido."); }
+        if (text.Contains('\0')) throw new ValidationError("El archivo no es texto UTF-8 válido.");
+        return text.TrimStart('\uFEFF');
+    }
 
     private static string ExtractPdf(byte[] bytes)
     {

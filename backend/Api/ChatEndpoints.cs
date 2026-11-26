@@ -82,10 +82,19 @@ public static class ChatEndpoints
 
         g.MapPost("/upload", async (HttpRequest req, SessionFileService files, RagOptions o, CancellationToken ct) =>
         {
-            if (req.ContentLength > o.MaxUploadBytes + 64 * 1024)
-                throw new ValidationError($"El archivo supera el tamaño máximo permitido ({o.MaxUploadBytes / (1024 * 1024)} MB).");
+            var tooLarge = $"El archivo supera el tamaño máximo permitido ({o.MaxUploadBytes / (1024 * 1024)} MB).";
+            var maxBody = o.MaxUploadBytes + 64 * 1024;
+            if (req.ContentLength > maxBody) throw new ValidationError(tooLarge);
+            // Also caps chunked bodies, which carry no Content-Length, instead of Kestrel's 30 MB default.
+            if (req.HttpContext.Features.Get<IHttpMaxRequestBodySizeFeature>() is { IsReadOnly: false } limit)
+                limit.MaxRequestBodySize = maxBody;
             if (!req.HasFormContentType) throw new ValidationError("Envíe el archivo como multipart/form-data.");
-            var form = await req.ReadFormAsync(ct);
+            IFormCollection form;
+            try { form = await req.ReadFormAsync(ct); }
+            catch (BadHttpRequestException e) when (e.StatusCode == StatusCodes.Status413PayloadTooLarge)
+            {
+                throw new ValidationError(tooLarge);
+            }
             var file = form.Files.GetFile("file") ?? throw new ValidationError("Falta el archivo ('file').");
             await using var stream = file.OpenReadStream();
             return Results.Ok(await files.IngestAsync(form["sessionId"].ToString(), file.FileName, stream, ct));
