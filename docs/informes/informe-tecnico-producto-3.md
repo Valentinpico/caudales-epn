@@ -367,7 +367,10 @@ el corpus permanente ni en el repositorio digital.
   válido y sin bytes nulos: un binario renombrado como texto se rechaza **antes** de gastar
   llamadas de embeddings.
 - **Límites.** 10 MB por archivo, comprobados tanto con `Content-Length` como en cuerpos
-  fragmentados (sin esa cabecera), y un máximo de 300 fragmentos por archivo.
+  fragmentados (sin esa cabecera), un máximo de 300 fragmentos por archivo y de **600
+  fragmentos por sesión** (unos dos archivos extensos, `RAG__MAXCHUNKSPERSESSION`). La cuota de
+  la sesión se comprueba antes de calcular embeddings; al superarla la API responde `413` con
+  un mensaje que pide quitar el archivo actual antes de cargar otro.
 - **Vencimiento.** El servicio en segundo plano elimina cada 10 minutos los fragmentos con más
   de **120 minutos** (`RAG__SESSIONTTLMINUTES`). La interfaz muestra la hora hasta la que el
   archivo estará disponible.
@@ -417,6 +420,11 @@ lo que la protección se trató como parte del producto:
   modelos, número de fragmentos, fecha del índice y parámetros de recuperación; ante una falla
   muestra un mensaje genérico y deja en los registros del servidor los mensajes del proveedor o
   de la base de datos, que podrían revelar identificadores de la cuenta o del servidor.
+- **Proveedor mal configurado.** Si el proveedor no puede configurarse al arrancar (por
+  ejemplo, `RAG__PROVIDER=openai` sin `OPENAI_API_KEY`, o credenciales de AWS que no se
+  resuelven), el error queda en los registros y solo el asistente se deshabilita: toda ruta
+  `/api/chat` responde `503` con «El asistente no está disponible en este momento.», que la
+  interfaz muestra tal cual, mientras el resto de la plataforma sigue funcionando.
 
 ### 3.10 Pruebas
 
@@ -426,8 +434,8 @@ implementación en memoria. Al cierre de este informe:
 
 | Suite | Total | Del asistente | Comando |
 |---|---|---|---|
-| Backend (xUnit) | **102** | 45 | `dotnet test backend/tests/CaudalesPlatform.Tests.csproj` |
-| Frontend (Vitest) | **40** | 28 | `cd frontend && npx vitest run` |
+| Backend (xUnit) | **106** | 49 | `dotnet test backend/tests/CaudalesPlatform.Tests.csproj` |
+| Frontend (Vitest) | **42** | 30 | `cd frontend && npx vitest run` |
 | Extractor de PDF (unittest) | **5** | 5 | `python3 -m unittest scripts/corpus_pdf/test_extract_pdfs.py` |
 
 *Tabla 5. Suites de prueba al cierre del Producto 3 (todas en verde).*
@@ -443,17 +451,19 @@ Lo que se prueba, y por qué:
   ajena, que una pregunta corta sí pueda apoyarse en el turno anterior y que la marca
   `[[SIN_RESPALDO]]` se detecte aunque llegue partida entre varios fragmentos del flujo.
 - **Sesiones:** la carga va solo a la tabla de sesión, se rechazan identificadores,
-  extensiones, tamaños y binarios disfrazados de texto, y la purga y el borrado eliminan lo
-  que corresponde.
+  extensiones, tamaños y binarios disfrazados de texto, se aplica la cuota de fragmentos por
+  sesión sin llamar al proveedor, y la purga y el borrado eliminan lo que corresponde.
 - **Proveedores:** Bedrock es el proveedor por omisión y usa reintentos estándar; OpenAI exige
   clave; ida y vuelta del formato de Cohere; 1 024 dimensiones y orden de entrada en OpenAI;
-  lectura del flujo y de los errores.
+  lectura del flujo y de los errores; un proveedor mal configurado deja el asistente en `503`
+  sin afectar al resto de la API.
 - **Indexado y catálogo:** se indexa una vez y no se repite hasta que cambia el contenido o el
   modelo; la proyección del grafo, el repositorio y las estaciones produce el Markdown
   esperado.
 - **Puerta de administración:** combinaciones de métodos y rutas en mayúsculas y minúsculas.
 - **Frontend:** interpretación de la respuesta (párrafos, listas, citas), lectura del flujo de
-  eventos —incluidos eventos partidos por la red— y estado de la conversación (abstención,
+  eventos —incluidos eventos partidos por la red—, negrita sin cerrar al detener el flujo,
+  mensajes de error del servidor (`413`, `429`, `503`) y estado de la conversación (abstención,
   historial, persistencia), la cancelación con «Detener» y la carga y el reemplazo del archivo
   propio.
 
@@ -682,7 +692,7 @@ conviene validarlos con preguntas nuevas.
 - La superficie pública quedó acotada en abuso y costo: límite por IP con una cabecera de
   reenvío que no se puede falsificar, puerta de administración insensible a mayúsculas,
   aislamiento de sesiones y defensa ante instrucciones incrustadas en los documentos.
-- La calidad se respalda con 147 pruebas automatizadas en verde (102 del backend, 40 del
+- La calidad se respalda con 153 pruebas automatizadas en verde (106 del backend, 42 del
   frontend y 5 del extractor) y con una evaluación reproducible cuyos fallos guiaron los
   ajustes de recuperación.
 
@@ -744,6 +754,7 @@ conviene validarlos con preguntas nuevas.
 | `RAG__SESSIONTTLMINUTES` | `120` | Vida de un archivo propio |
 | `RAG__MAXUPLOADBYTES` | `10485760` | Tamaño máximo por archivo (10 MB) |
 | `RAG__MAXCHUNKSPERUPLOAD` | `300` | Fragmentos máximos por archivo |
+| `RAG__MAXCHUNKSPERSESSION` | `600` | Fragmentos máximos por sesión, sumando sus cargas |
 
 *Tabla 10. Variables de configuración del asistente.*
 
@@ -755,8 +766,8 @@ cp env.example .env          # definir ADMIN_PASSWORD; RAG__PROVIDER=bedrock
 docker compose up --build    # aplicativo en http://localhost:5174, página /asistente
 
 # Pruebas
-dotnet test backend/tests/CaudalesPlatform.Tests.csproj           # 102 pruebas
-cd frontend && npx vitest run                                     # 40 pruebas
+dotnet test backend/tests/CaudalesPlatform.Tests.csproj           # 106 pruebas
+cd frontend && npx vitest run                                     # 42 pruebas
 python3 -m unittest scripts/corpus_pdf/test_extract_pdfs.py       # 5 pruebas
 
 # Extracción de la postulación a Markdown (fuera de línea)

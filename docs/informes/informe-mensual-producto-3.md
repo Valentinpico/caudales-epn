@@ -51,17 +51,18 @@ Durante el período se desarrollaron las siguientes actividades:
    continuo** (*Server-Sent Events*), con instrucción de sistema en español neutro y trato de
    usted.
 8. Implementación de la **consulta temporal de archivos propios** (PDF, Markdown o texto, hasta
-   10 MB), aislada por sesión, con vencimiento a los 120 minutos, purga automática y borrado a
-   demanda.
+   10 MB por archivo), aislada por sesión y con un tope de 600 fragmentos por sesión, con
+   vencimiento a los 120 minutos, purga automática y borrado a demanda.
 9. **Seguridad y control de costos**: límite de 10 consultas por minuto por IP, puerta de
    administración para el reindexado, aislamiento de sesiones, protección ante instrucciones
-   incrustadas en los documentos y límites de pregunta, contexto y respuesta.
+   incrustadas en los documentos, límites de pregunta, contexto y respuesta, y deshabilitación
+   controlada del asistente (respuesta `503`) si el proveedor de modelos está mal configurado.
 10. Desarrollo de la **interfaz de consulta**: página «Asistente» y botón flotante en toda la
     plataforma, preguntas de ejemplo, citas enlazadas a sus fuentes con porcentaje de
     similitud, indicación de abstención y panel del archivo propio.
 11. **Evaluación de punta a punta** con 32 preguntas de referencia contra la API real, cuyos
     resultados guiaron los ajustes de recuperación.
-12. Revisión de calidad y seguridad, pruebas automatizadas (147 en verde: 102 del backend, 40 del
+12. Revisión de calidad y seguridad, pruebas automatizadas (153 en verde: 106 del backend, 42 del
     frontend y 5 del extractor de PDF), elaboración del informe técnico del producto y control de
     versiones (Git, rama `producto-3`).
 
