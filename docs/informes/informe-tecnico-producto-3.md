@@ -15,7 +15,7 @@
 | **Servidor Público 3** | Kenig Valentín Pico Ponce |
 | **Unidad** | Escuela Politécnica Nacional, Departamento de Matemática |
 | **Período** | 01 al 31 de diciembre de 2026 |
-| **Fecha de entrega** | [COMPLETAR: fecha] |
+| **Fecha de entrega** | 31 de diciembre de 2026 |
 
 ---
 

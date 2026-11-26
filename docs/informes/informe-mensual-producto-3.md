@@ -7,12 +7,12 @@
 
 | Campo | Valor |
 |-------|-------|
-| **NOMBRE DEL PRODUCTO** | Sistema de consulta inteligente basado en RAG para documentación, metodologías, datos y resultados del proyecto |
+| **NOMBRE DEL PRODUCTO** | Informe técnico de implementación de un sistema de consulta inteligente basado en RAG para documentación, metodologías, datos y resultados del proyecto. |
 | **CÓDIGO PROYECTO** | PISF-25-03 |
 | **NOMBRE DE PROYECTO** | Metodología para la regionalización de caudales en Ecuador basada en el Análisis de Datos Funcionales y la homogeneización de variables hidrometeorológicas |
 | **NOMBRE DEL PROFESIONAL** | Kenig Valentín Pico Ponce |
 | **PERÍODO** | 01 al 31 de diciembre de 2026 |
-| **FECHA DE PRESENTACIÓN** | [COMPLETAR: fecha de entrega] |
+| **FECHA DE PRESENTACIÓN** | 31 de diciembre de 2026 |
 
 ---
 
