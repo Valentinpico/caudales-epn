@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Text;
 
 namespace CaudalesPlatform.Api.Application.Rag;
@@ -9,7 +10,7 @@ public enum MarkerState { Undecided, Marker, Answer }
 /// Pure prompt construction: grounding floor, system rules, numbered context and the short
 /// chat history. Kept apart from ChatService so it is testable without a model or a database.
 /// </summary>
-public static class RagPrompt
+public static partial class RagPrompt
 {
     public const int MaxHistoryTurns = 6;
     public const int MaxHistoryChars = 800;
@@ -135,12 +136,23 @@ public static class RagPrompt
             var text = c.Content.Length <= remaining ? c.Content : c.Content[..remaining];
             remaining -= text.Length;
             var origin = c.FromSession ? " (archivo adjuntado por el usuario)" : "";
-            sb.AppendLine($"[{i + 1}] {c.Title} — {c.Section}{origin}");
-            sb.AppendLine($"<documento n=\"{i + 1}\">\n{text.Replace("</documento>", "")}\n</documento>");
+            sb.AppendLine($"[{i + 1}] {Defang(OneLine(c.Title))} — {Defang(OneLine(c.Section))}{origin}");
+            sb.AppendLine($"<documento n=\"{i + 1}\">\n{Defang(text)}\n</documento>");
             sb.AppendLine();
         }
         return sb.ToString();
     }
+
+    /// <summary>
+    /// Removes anything shaped like the fence tag (any case, opening or closing), so a fragment
+    /// cannot close its own fence or forge another one.
+    /// </summary>
+    public static string Defang(string text) => FenceTag().Replace(text, "");
+
+    [GeneratedRegex(@"<\s*/?\s*documento\b[^>]*>", RegexOptions.IgnoreCase)]
+    private static partial Regex FenceTag();
+
+    private static string OneLine(string s) => s.ReplaceLineEndings(" ");
 
     private static string Truncate(string s, int max) => s.Length <= max ? s : s[..max] + "…";
 }
