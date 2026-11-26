@@ -81,15 +81,18 @@ public class ChatService(IEmbedder embedder, IChatModel chat, IChunkStore store,
         var texts = augmented == question ? new[] { question } : [question, augmented];
         var vectors = await embedder.EmbedAsync(texts, isQuery: true, ct);
 
-        var hits = await store.SearchAsync(vectors[0], embedder.Model, sessionId, options.TopK, ct);
+        var hits = await SearchAsync(vectors[0], sessionId, ct);
         var grounded = RagPrompt.Grounded(hits, options.MinScore);
         var topScore = TopScore(hits);
         if (vectors.Length == 1 || (grounded.Count == 0 && !RagPrompt.IsFollowUp(question))) return (grounded, topScore);
 
-        var augmentedHits = await store.SearchAsync(vectors[1], embedder.Model, sessionId, options.TopK, ct);
+        var augmentedHits = await SearchAsync(vectors[1], sessionId, ct);
         var augmentedGrounded = RagPrompt.Grounded(augmentedHits, options.MinScore);
         return augmentedGrounded.Count == 0 ? (grounded, topScore) : (augmentedGrounded, Math.Max(topScore, TopScore(augmentedHits)));
     }
+
+    private async Task<List<ScoredChunk>> SearchAsync(float[] vector, string? sessionId, CancellationToken ct) =>
+        RagPrompt.Diversify(await store.SearchAsync(vector, embedder.Model, sessionId, options.TopK * RagPrompt.SearchOverfetch, ct), options.TopK);
 
     private static double TopScore(List<ScoredChunk> hits) => hits.Count == 0 ? 0 : Math.Round(hits.Max(h => h.Score), 4);
 

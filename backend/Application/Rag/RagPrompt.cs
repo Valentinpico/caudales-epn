@@ -13,6 +13,10 @@ public static class RagPrompt
 {
     public const int MaxHistoryTurns = 6;
     public const int MaxHistoryChars = 800;
+    /// <summary>Chunks kept per document section, so one long list cannot fill the whole context.</summary>
+    public const int MaxChunksPerSection = 3;
+    /// <summary>Candidates fetched per slot of TopK before diversifying.</summary>
+    public const int SearchOverfetch = 3;
     /// <summary>Questions this short rarely carry enough meaning to be retrieved on their own.</summary>
     public const int MaxFollowUpWords = 4;
     /// <summary>Exact reply the model gives when the context does not support an answer.</summary>
@@ -52,6 +56,23 @@ public static class RagPrompt
     /// <summary>Hits that clear the floor. Session chunks are the user's own file and always count.</summary>
     public static List<ScoredChunk> Grounded(IEnumerable<ScoredChunk> hits, double minScore) =>
         hits.Where(h => h.FromSession || h.Score >= minScore).ToList();
+
+    /// <summary>Best-first hits with at most MaxChunksPerSection chunks from the same document section.</summary>
+    public static List<ScoredChunk> Diversify(IEnumerable<ScoredChunk> hits, int k)
+    {
+        var perSection = new Dictionary<(string, string), int>();
+        var picked = new List<ScoredChunk>();
+        foreach (var h in hits.OrderByDescending(h => h.Score))
+        {
+            if (picked.Count == k) break;
+            var key = (h.DocId, h.Section);
+            var n = perSection.GetValueOrDefault(key);
+            if (n == MaxChunksPerSection) continue;
+            perSection[key] = n + 1;
+            picked.Add(h);
+        }
+        return picked;
+    }
 
     /// <summary>A short question ("¿y el presupuesto?") leans on the previous turn for its meaning.</summary>
     public static bool IsFollowUp(string question) =>

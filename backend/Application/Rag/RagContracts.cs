@@ -19,7 +19,7 @@ public class RagOptions
     public string CorpusRoots { get; set; } = "docs/informes,docs/corpus";
     public bool IndexOnStartup { get; set; } = true;
 
-    public int TopK { get; set; } = 6;
+    public int TopK { get; set; } = 8;
     /// <summary>Grounding floor: when every corpus hit scores below it, answer is abstention, no LLM call.</summary>
     public double MinScore { get; set; } = 0.35;
     public int MaxContextChars { get; set; } = 12_000;

@@ -105,6 +105,18 @@ public class RagPromptTests
             RagPrompt.RetrievalQuery("¿Y el codirector?", [new("user", "¿Quién dirige?"), new("assistant", "X")]));
     }
 
+    [Fact]
+    public void Diversify_caps_chunks_per_section_and_keeps_rank_order()
+    {
+        ScoredChunk H(string section, double score) => new("d", "T", section, null, section, score, false);
+        var hits = new[] { H("Estaciones", 0.70), H("Estaciones", 0.69), H("Estaciones", 0.68), H("Estaciones", 0.67), H("Cronograma", 0.60), H("Resumen", 0.50) };
+
+        var picked = RagPrompt.Diversify(hits, k: 4);
+
+        Assert.Equal(RagPrompt.MaxChunksPerSection, picked.Count(h => h.Section == "Estaciones"));
+        Assert.Equal([0.70, 0.69, 0.68, 0.60], picked.Select(h => h.Score));
+    }
+
     [Theory]
     [InlineData("¿Y quién la codirige?", true)]
     [InlineData("¿Y el presupuesto?", true)]
@@ -287,7 +299,7 @@ public class ChatServiceTests
         _store.Hits = [new("sesion:1", "mio", "S", null, "propio", 0.05, true)];
         var events = await Ask(new("Resume mi archivo", "sesion-abc-123"));
 
-        Assert.Equal(("sesion-abc-123", 4), _store.LastSearch);
+        Assert.Equal(("sesion-abc-123", 4 * RagPrompt.SearchOverfetch), _store.LastSearch);
         Assert.Equal(AnswerKind.Rag, Assert.IsType<DoneEvent>(events[^1]).Kind);
         Assert.Throws<ValidationError>(() => Service().Validate(new("hola", "../../etc")));
     }
