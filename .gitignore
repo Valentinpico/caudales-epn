@@ -9,3 +9,5 @@ CLAUDE.md
 info/
 odd/
 *.tsbuildinfo
+__pycache__/
+*.pyc
