@@ -75,6 +75,28 @@ public static partial class RagPrompt
         return picked;
     }
 
+    /// <summary>
+    /// Alternates two ranked lists (first, second, first, …), skipping chunks already taken and
+    /// sections that reached MaxChunksPerSection, until k chunks are picked.
+    /// </summary>
+    public static List<ScoredChunk> Interleave(IReadOnlyList<ScoredChunk> first, IReadOnlyList<ScoredChunk> second, int k)
+    {
+        var picked = new List<ScoredChunk>();
+        var seen = new HashSet<(string, string, string)>();
+        var perSection = new Dictionary<(string, string), int>();
+        for (var i = 0; picked.Count < k && (i < first.Count || i < second.Count); i++)
+        foreach (var list in new[] { first, second })
+        {
+            if (i >= list.Count || picked.Count == k) continue;
+            var h = list[i];
+            var section = (h.DocId, h.Section);
+            if (!seen.Add((h.DocId, h.Section, h.Content)) || perSection.GetValueOrDefault(section) == MaxChunksPerSection) continue;
+            perSection[section] = perSection.GetValueOrDefault(section) + 1;
+            picked.Add(h);
+        }
+        return picked;
+    }
+
     /// <summary>A short question ("¿y el presupuesto?") leans on the previous turn for its meaning.</summary>
     public static bool IsFollowUp(string question) =>
         question.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Count(w => w.Any(char.IsLetterOrDigit))

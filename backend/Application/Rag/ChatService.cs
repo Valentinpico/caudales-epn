@@ -71,8 +71,9 @@ public class ChatService(IEmbedder embedder, IChatModel chat, IChunkStore store,
 
     /// <summary>
     /// The grounding floor is judged on the question alone, so history cannot carry an unrelated
-    /// question over it. The history-augmented query (embedded in the same call) then ranks the
-    /// context; only a short follow-up, too thin to score by itself, may clear the floor through it.
+    /// question over it. Hits for the history-augmented query (embedded in the same call) are
+    /// interleaved with the question's own; only a short follow-up, too thin to score by itself,
+    /// may clear the floor through them.
     /// </summary>
     private async Task<(List<ScoredChunk> Grounded, double TopScore)> RetrieveAsync(string question, string? sessionId,
         IReadOnlyList<ChatTurn>? history, CancellationToken ct)
@@ -88,7 +89,12 @@ public class ChatService(IEmbedder embedder, IChatModel chat, IChunkStore store,
 
         var augmentedHits = await SearchAsync(vectors[1], sessionId, ct);
         var augmentedGrounded = RagPrompt.Grounded(augmentedHits, options.MinScore);
-        return augmentedGrounded.Count == 0 ? (grounded, topScore) : (augmentedGrounded, Math.Max(topScore, TopScore(augmentedHits)));
+        // Interleave rather than replace: when the user changes topic ("¿quién dirige el proyecto?"
+        // after a question on objectives) the augmented query ranks only the previous topic, and the
+        // context would lose every chunk that answers the current question.
+        return augmentedGrounded.Count == 0
+            ? (grounded, topScore)
+            : (RagPrompt.Interleave(grounded, augmentedGrounded, options.TopK), Math.Max(topScore, TopScore(augmentedHits)));
     }
 
     private async Task<List<ScoredChunk>> SearchAsync(float[] vector, string? sessionId, CancellationToken ct) =>
