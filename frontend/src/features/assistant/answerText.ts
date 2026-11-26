@@ -69,12 +69,13 @@ function withCitations(text: string, out: Inline[], kind: "text" | "bold") {
 
 export function parseInline(text: string): Inline[] {
   const out: Inline[] = [];
-  // Odd pieces sit between "**" pairs; an unclosed "**" (mid-stream) stays as text.
+  // Odd pieces sit between "**" pairs; after an unclosed "**" (stream stopped mid-bold) the
+  // rest is plain text, without the stray asterisks.
   const pieces = text.split("**");
   const closed = pieces.length % 2 === 1 ? pieces.length : pieces.length - 1;
   pieces.forEach((piece, i) => {
     if (!piece) return;
-    if (i >= closed) withCitations("**" + piece, out, "text");
+    if (i >= closed) withCitations(piece, out, "text");
     else withCitations(piece, out, i % 2 === 1 ? "bold" : "text");
   });
   return out;

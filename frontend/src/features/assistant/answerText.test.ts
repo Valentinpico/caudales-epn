@@ -29,11 +29,18 @@ describe("parseInline", () => {
     ]);
   });
 
-  it("keeps an unclosed ** as text while the answer is still streaming", () => {
+  it("renders the text after an unclosed ** as plain text, without the asterisks", () => {
     expect(parseInline("Uno **dos")).toEqual([
       { kind: "text", text: "Uno " },
-      { kind: "text", text: "**dos" },
+      { kind: "text", text: "dos" },
     ]);
+    expect(parseInline("**a** b **c [2]")).toEqual([
+      { kind: "bold", text: "a" },
+      { kind: "text", text: " b " },
+      { kind: "text", text: "c " },
+      { kind: "cite", n: 2 },
+    ]);
+    expect(parseInline("Fin **")).toEqual([{ kind: "text", text: "Fin " }]);
   });
 });
 
