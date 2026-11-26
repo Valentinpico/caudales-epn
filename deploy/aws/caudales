@@ -67,9 +67,10 @@ case "${1:-status}" in
     trap 'aws cloudwatch enable-alarm-actions --alarm-names caudales-demo-idle-stop' EXIT
     start; allow_my_ip
     until remote "test -f /opt/caudales/.bootstrap-done" 2>/dev/null; do echo "waiting for first-boot setup..."; sleep 10; done
+    # docs/ ships: its Markdown is the document assistant's corpus (mounted read-only).
     rsync -az --delete -e "ssh ${SSH_OPTS[*]}" \
       --exclude .git --exclude node_modules --exclude bin --exclude obj --exclude dist \
-      --exclude .env --exclude .bootstrap-done --exclude odd --exclude docs --exclude .atl --exclude .playwright-mcp \
+      --exclude .env --exclude .bootstrap-done --exclude odd --exclude 'docs/capturas' --exclude '*.docx' --exclude .atl --exclude .playwright-mcp \
       --exclude '*.tsbuildinfo' --exclude 'backend/data' --exclude 'backend/info' \
       "$ROOT/" "ubuntu@$IP:/opt/caudales/"
     # Secrets are generated on the box and never leave it.

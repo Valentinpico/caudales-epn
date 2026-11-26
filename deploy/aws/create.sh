@@ -62,6 +62,35 @@ if [ -z "${INSTANCE:-}" ] || [ "$(aws ec2 describe-instances --instance-ids "$IN
 fi
 save INSTANCE "$INSTANCE"
 
+# Document assistant: the backend container calls Bedrock with the instance role. Only the two
+# models it uses; the Claude inference profile may route to any US region, hence the wildcard.
+ROLE=$NAME-bedrock
+if ! aws iam get-role --role-name $ROLE >/dev/null 2>&1; then
+  aws iam create-role --role-name $ROLE --assume-role-policy-document \
+    '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"ec2.amazonaws.com"},"Action":"sts:AssumeRole"}]}' >/dev/null
+  echo "role $ROLE created"
+fi
+aws iam put-role-policy --role-name $ROLE --policy-name bedrock-invoke --policy-document "{
+  \"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",
+  \"Action\":[\"bedrock:InvokeModel\",\"bedrock:InvokeModelWithResponseStream\"],
+  \"Resource\":[
+    \"arn:aws:bedrock:$AWS_REGION::foundation-model/cohere.embed-multilingual-v3\",
+    \"arn:aws:bedrock:$AWS_REGION:$ACCOUNT:inference-profile/us.anthropic.claude-haiku-4-5-20251001-v1:0\",
+    \"arn:aws:bedrock:*::foundation-model/anthropic.claude-haiku-4-5-20251001-v1:0\"]}]}"
+if ! aws iam get-instance-profile --instance-profile-name $ROLE >/dev/null 2>&1; then
+  aws iam create-instance-profile --instance-profile-name $ROLE >/dev/null
+  aws iam add-role-to-instance-profile --instance-profile-name $ROLE --role-name $ROLE
+  sleep 10  # profile propagation before association
+fi
+if [ "$(aws ec2 describe-iam-instance-profile-associations --filters Name=instance-id,Values="$INSTANCE" \
+      --query 'length(IamInstanceProfileAssociations[?State==`associated`])' --output text)" = "0" ]; then
+  aws ec2 associate-iam-instance-profile --instance-id "$INSTANCE" --iam-instance-profile Name=$ROLE >/dev/null
+  echo "instance profile $ROLE attached"
+fi
+# Containers sit one network hop behind the host: IMDSv2 needs hop limit 2 to hand them credentials.
+aws ec2 modify-instance-metadata-options --instance-id "$INSTANCE" --http-tokens required \
+  --http-put-response-hop-limit 2 >/dev/null
+
 # Auto-stop: average CPU < 5 % for 2 x 5 min -> stop. The waker Lambda resets it to OK on every
 # start, because alarm actions only fire on a state transition.
 aws cloudwatch put-metric-alarm --alarm-name "$NAME-idle-stop" \
