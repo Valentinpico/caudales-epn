@@ -71,6 +71,9 @@ internal sealed class FakeStore : IChunkStore
         return Task.CompletedTask;
     }
 
+    public Task<int> CountSessionChunksAsync(string sessionId, CancellationToken ct) =>
+        Task.FromResult(Sessions.TryGetValue(sessionId, out var chunks) ? chunks.Count : 0);
+
     public Task<int> DeleteSessionAsync(string sessionId, CancellationToken ct) =>
         Task.FromResult(Sessions.Remove(sessionId, out var removed) ? removed.Count : 0);
 

@@ -42,6 +42,11 @@ public partial class SessionFileService(IEmbedder embedder, IChunkStore store, R
         if (pieces.Count == 0) throw new ValidationError("No se pudo extraer texto del archivo.");
         if (pieces.Count > options.MaxChunksPerUpload)
             throw new ValidationError("El archivo es demasiado extenso para consultarlo en el chat.");
+        // Checked before embedding, so a session over quota costs no provider calls.
+        if (await store.CountSessionChunksAsync(session, ct) + pieces.Count > options.MaxChunksPerSession)
+            throw new PayloadTooLargeError(
+                $"Esta sesión alcanzó el límite de contenido cargado ({options.MaxChunksPerSession} fragmentos). " +
+                "Quite el archivo actual antes de cargar otro.");
 
         var docId = $"sesion:{Guid.NewGuid():N}";
         var vectors = await embedder.EmbedAsync(pieces.Select(p => $"{title}\n{p.Section}\n\n{p.Text}").ToList(), false, ct);

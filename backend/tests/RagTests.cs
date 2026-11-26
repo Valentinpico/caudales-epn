@@ -447,6 +447,25 @@ public class SessionFileServiceTests
     }
 
     [Fact]
+    public async Task Rejects_uploads_past_the_session_chunk_quota_before_embedding()
+    {
+        var s = Service(new RagOptions { MaxChunksPerSession = 2 });
+        await s.IngestAsync("sesion-123", "a.txt", Text("uno"), default);
+        await s.IngestAsync("sesion-123", "b.txt", Text("dos"), default);
+
+        var e = await Assert.ThrowsAsync<PayloadTooLargeError>(() => s.IngestAsync("sesion-123", "c.txt", Text("tres"), default));
+        Assert.Equal(413, e.StatusCode);
+        Assert.Contains("(2 fragmentos)", e.Message);
+        Assert.Equal(2, _embedder.Calls.Count);
+        Assert.Equal(2, _store.Sessions["sesion-123"].Count);
+
+        // Other sessions keep their own quota, and removing the file frees it.
+        await s.IngestAsync("sesion-456", "c.txt", Text("tres"), default);
+        await s.DeleteSessionAsync("sesion-123", default);
+        await s.IngestAsync("sesion-123", "c.txt", Text("tres"), default);
+    }
+
+    [Fact]
     public async Task Purge_removes_chunks_older_than_the_ttl()
     {
         await Service().PurgeExpiredAsync(default);

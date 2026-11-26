@@ -30,6 +30,8 @@ public class RagOptions
     public int SessionTtlMinutes { get; set; } = 120;
     public long MaxUploadBytes { get; set; } = 10 * 1024 * 1024;
     public int MaxChunksPerUpload { get; set; } = 300;
+    /// <summary>Cap on chunks stored per session across uploads (about two large files).</summary>
+    public int MaxChunksPerSession { get; set; } = 600;
 
     public string EmbeddingModel => IsOpenAi ? OpenAiEmbeddingModel : BedrockEmbeddingModel;
     public string ChatModel => IsOpenAi ? OpenAiChatModel : BedrockChatModel;
@@ -66,6 +68,7 @@ public interface IChunkStore
     Task ReplaceCorpusAsync(IReadOnlyList<ChunkRecord> chunks, string model, string fingerprint, CancellationToken ct);
     Task<List<ScoredChunk>> SearchAsync(float[] query, string model, string? sessionId, int k, CancellationToken ct);
     Task AddSessionChunksAsync(string sessionId, IReadOnlyList<ChunkRecord> chunks, string model, CancellationToken ct);
+    Task<int> CountSessionChunksAsync(string sessionId, CancellationToken ct);
     Task<int> DeleteSessionAsync(string sessionId, CancellationToken ct);
     Task<int> PurgeSessionsOlderThanAsync(DateTimeOffset cutoff, CancellationToken ct);
 }

@@ -146,6 +146,13 @@ public sealed class PgVectorChunkStore(NpgsqlDataSource dataSource) : IChunkStor
         await tx.CommitAsync(ct);
     }
 
+    public async Task<int> CountSessionChunksAsync(string sessionId, CancellationToken ct)
+    {
+        await using var cmd = dataSource.CreateCommand("SELECT count(*)::int FROM rag_session_chunks WHERE session_id = $1");
+        cmd.Parameters.Add(new() { Value = sessionId });
+        return (int)(await cmd.ExecuteScalarAsync(ct))!;
+    }
+
     public async Task<int> DeleteSessionAsync(string sessionId, CancellationToken ct)
     {
         await using var cmd = dataSource.CreateCommand("DELETE FROM rag_session_chunks WHERE session_id = $1");
