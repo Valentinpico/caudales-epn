@@ -101,7 +101,10 @@ public sealed class BedrockChat(IAmazonBedrockRuntime client, string model, int 
             InferenceConfig = new InferenceConfiguration { MaxTokens = maxTokens, Temperature = 0.2f },
         }, ct);
 
-        await foreach (var e in response.Stream.WithCancellation(ct))
+        // Disposing the event stream closes the HTTP response, so a client that stops reading
+        // (disconnect or the no-support marker) also stops the generation being billed.
+        using var stream = response.Stream;
+        await foreach (var e in stream.WithCancellation(ct))
             if (e is ContentBlockDeltaEvent { Delta.Text: { Length: > 0 } text }) yield return text;
     }
 }
