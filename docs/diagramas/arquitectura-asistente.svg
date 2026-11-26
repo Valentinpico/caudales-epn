@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="Archivo, Helvetica, Arial, sans-serif" font-size="13">
+  <rect width="960" height="600" fill="#F4F6F5"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#14232E"/></marker>
+  </defs>
+
+  <!-- Servicios externos de modelos -->
+  <rect x="400" y="20" width="320" height="100" fill="#fff" stroke="#A8742A" stroke-width="2" rx="4"/>
+  <text x="560" y="46" text-anchor="middle" font-weight="700" fill="#14232E">Amazon Bedrock (us-east-1)</text>
+  <text x="560" y="70" text-anchor="middle" fill="#5B6B72" font-size="12">Embeddings: Cohere Embed Multilingual v3 (1024)</text>
+  <text x="560" y="90" text-anchor="middle" fill="#5B6B72" font-size="12">Generación: Claude Haiku 4.5 (Converse en flujo)</text>
+  <text x="560" y="110" text-anchor="middle" fill="#5B6B72" font-size="11">proveedor por omisión · rol IAM / perfil AWS</text>
+
+  <rect x="740" y="20" width="200" height="100" fill="#fff" stroke="#5B6B72" stroke-dasharray="6 4" rx="4"/>
+  <text x="840" y="46" text-anchor="middle" font-weight="700" fill="#14232E">OpenAI directo</text>
+  <text x="840" y="70" text-anchor="middle" fill="#5B6B72" font-size="12">text-embedding-3-small</text>
+  <text x="840" y="90" text-anchor="middle" fill="#5B6B72" font-size="12">gpt-4o-mini</text>
+  <text x="840" y="110" text-anchor="middle" fill="#5B6B72" font-size="10">alternativa: RAG__PROVIDER=openai</text>
+
+  <!-- Navegador -->
+  <rect x="10" y="290" width="150" height="120" fill="#fff" stroke="#14232E" rx="4"/>
+  <text x="85" y="322" text-anchor="middle" font-weight="700" fill="#14232E">Navegador</text>
+  <text x="85" y="344" text-anchor="middle" fill="#5B6B72" font-size="12">Página /asistente</text>
+  <text x="85" y="362" text-anchor="middle" fill="#5B6B72" font-size="12">botón flotante</text>
+  <text x="85" y="380" text-anchor="middle" fill="#5B6B72" font-size="12">React + TypeScript</text>
+  <text x="85" y="398" text-anchor="middle" fill="#5B6B72" font-size="11">sesión en sessionStorage</text>
+
+  <!-- Docker Compose -->
+  <rect x="200" y="150" width="745" height="430" fill="none" stroke="#5B6B72" stroke-dasharray="6 4" rx="6"/>
+  <text x="216" y="172" fill="#5B6B72">Docker Compose</text>
+
+  <!-- API -->
+  <rect x="220" y="185" width="370" height="380" fill="#fff" stroke="#1F6F8B" stroke-width="2" rx="4"/>
+  <text x="405" y="212" text-anchor="middle" font-weight="700" fill="#14232E">API .NET 9 · asistente documental</text>
+  <rect x="240" y="225" width="330" height="34" fill="#E3ECEB" rx="3"/><text x="405" y="247" text-anchor="middle">Endpoints /api/chat · límite por IP (10/min)</text>
+  <rect x="240" y="269" width="330" height="34" fill="#E3ECEB" rx="3"/><text x="405" y="291" text-anchor="middle">Puerta de administración (X-Admin-Password)</text>
+  <rect x="240" y="313" width="330" height="34" fill="#E3ECEB" rx="3"/><text x="405" y="335" text-anchor="middle">ChatService: recuperación, umbral, citas</text>
+  <rect x="240" y="357" width="330" height="34" fill="#E3ECEB" rx="3"/><text x="405" y="379" text-anchor="middle">CorpusService: Markdown + catálogo proyectado</text>
+  <rect x="240" y="401" width="330" height="34" fill="#E3ECEB" rx="3"/><text x="405" y="423" text-anchor="middle">SessionFileService: archivos propios temporales</text>
+  <rect x="240" y="445" width="330" height="34" fill="#E3ECEB" rx="3"/><text x="405" y="467" text-anchor="middle">RagBackgroundService: indexado y purga</text>
+  <text x="405" y="510" text-anchor="middle" fill="#5B6B72" font-size="12">Puertos: IEmbedder · IChatModel · IChunkStore</text>
+  <text x="405" y="530" text-anchor="middle" fill="#5B6B72" font-size="12">Adaptadores: Bedrock · OpenAI · PgVectorChunkStore</text>
+  <text x="405" y="550" text-anchor="middle" fill="#5B6B72" font-size="11">abstención en dos capas: umbral 0,35 y marca [[SIN_RESPALDO]]</text>
+
+  <!-- PostgreSQL -->
+  <rect x="630" y="200" width="300" height="160" fill="#fff" stroke="#0B3A53" stroke-width="2" rx="4"/>
+  <text x="780" y="228" text-anchor="middle" font-weight="700" fill="#14232E">PostgreSQL 16 + pgvector</text>
+  <text x="780" y="252" text-anchor="middle" fill="#5B6B72" font-size="12">rag_chunks: corpus permanente</text>
+  <text x="780" y="272" text-anchor="middle" fill="#5B6B72" font-size="12">rag_index_state: modelo y huella</text>
+  <text x="780" y="292" text-anchor="middle" fill="#5B6B72" font-size="12">rag_session_chunks: por sesión (120 min)</text>
+  <text x="780" y="316" text-anchor="middle" fill="#5B6B72" font-size="12">grafo, repositorio y estaciones</text>
+  <text x="780" y="336" text-anchor="middle" fill="#5B6B72" font-size="11">(origen del catálogo proyectado)</text>
+
+  <!-- Corpus -->
+  <rect x="630" y="400" width="300" height="100" fill="#fff" stroke="#A8742A" stroke-width="2" rx="4"/>
+  <text x="780" y="428" text-anchor="middle" font-weight="700" fill="#14232E">Corpus Markdown (solo lectura)</text>
+  <text x="780" y="452" text-anchor="middle" fill="#5B6B72" font-size="12">docs/informes · docs/corpus</text>
+  <text x="780" y="472" text-anchor="middle" fill="#5B6B72" font-size="12">postulación extraída del PDF fuera de línea</text>
+
+  <!-- Flechas -->
+  <path d="M160 335H216" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <text x="180" y="326" text-anchor="middle" font-size="10" fill="#5B6B72">POST</text>
+  <path d="M220 375H164" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <text x="180" y="392" text-anchor="middle" font-size="10" fill="#5B6B72">SSE</text>
+
+  <path d="M480 185V124" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <text x="472" y="140" text-anchor="end" font-size="10" fill="#5B6B72">vectores y respuesta en flujo</text>
+  <path d="M575 185V140H840V124" fill="none" stroke="#5B6B72" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#a)"/>
+
+  <path d="M590 280H626" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <path d="M630 300H594" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <text x="610" y="320" text-anchor="middle" font-size="10" fill="#5B6B72">SQL</text>
+
+  <path d="M630 450H594" stroke="#14232E" stroke-width="1.6" marker-end="url(#a)"/>
+  <text x="610" y="440" text-anchor="middle" font-size="10" fill="#5B6B72">lee</text>
+</svg>
