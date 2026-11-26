@@ -1,14 +1,11 @@
 <!-- rag: exclude -->
-# Implementación de un Asistente de Consulta Documental basado en Generación Aumentada por Recuperación (RAG) sobre la Documentación del Proyecto
+# Sistema de Consulta Inteligente basado en RAG para Documentación, Metodologías, Datos y Resultados del Proyecto
 
 **Metodología para la regionalización de caudales en Ecuador basada en el Análisis de Datos Funcionales y la homogeneización de variables hidrometeorológicas**
 
-> Informe técnico — Producto 3 (PISF-25-03). Nombre del producto: *Implementación de un
-> asistente de consulta documental basado en generación aumentada por recuperación (RAG)
-> sobre la documentación del proyecto, con respuestas ancladas en el corpus, fuentes citadas
-> de forma verificable y consulta temporal de archivos propios.* [CONFIRMAR: redacción
-> contractual del producto]. Los campos `[COMPLETAR: ...]` y `[CONFIRMAR]` son lo único
-> pendiente.
+> Informe técnico — Producto 3 (PISF-25-03). Informe técnico de implementación de un sistema
+> de consulta inteligente basado en RAG para documentación, metodologías, datos y resultados
+> del proyecto. Los campos `[COMPLETAR: ...]` son lo único pendiente.
 
 | | |
 |---|---|
@@ -17,7 +14,7 @@
 | **Codirector del proyecto** | Miguel Alfonso Flores Sánchez |
 | **Servidor Público 3** | Kenig Valentín Pico Ponce |
 | **Unidad** | Escuela Politécnica Nacional, Departamento de Matemática |
-| **Período** | 01 al 31 de diciembre de 2026 [CONFIRMAR] |
+| **Período** | 01 al 31 de diciembre de 2026 |
 | **Fecha de entrega** | [COMPLETAR: fecha] |
 
 ---
@@ -38,11 +35,15 @@
 
 ## 1. Introducción
 
-El presente informe describe el diseño e implementación de un **asistente de consulta
-documental** incorporado a la plataforma web del proyecto *Metodología para la
+El presente informe describe el diseño e implementación de un **sistema de consulta
+inteligente** (el asistente de la plataforma) incorporado a la plataforma web del proyecto *Metodología para la
 regionalización de caudales en Ecuador basada en el Análisis de Datos Funcionales y la
 homogeneización de variables hidrometeorológicas* (PISF-25-03), construido sobre la técnica
-de **generación aumentada por recuperación** (*Retrieval-Augmented Generation*, RAG).
+de **generación aumentada por recuperación** (*Retrieval-Augmented Generation*, RAG). El
+sistema cubre cuatro ámbitos del proyecto: la **documentación** (informes, postulación y
+repositorio digital), las **metodologías** (los métodos del grafo de conocimiento y los
+descritos en la postulación), los **datos** (el catálogo de estaciones y series) y los
+**resultados** (los del Producto 1 y la evaluación del propio sistema).
 
 El Producto 1 dejó la información del proyecto organizada pero repartida en varios lugares:
 la postulación describe los objetivos, la metodología, el cronograma y el presupuesto; los
@@ -82,8 +83,8 @@ El diseño se apoya en cuatro decisiones que atraviesan todo el producto:
 
 ### 2.1. Objetivo general
 
-Implementar un asistente de consulta documental que permita interrogar en lenguaje natural la
-documentación del proyecto PISF-25-03, con respuestas ancladas en el corpus del proyecto,
+Implementar un sistema de consulta inteligente basado en RAG que permita interrogar en lenguaje
+natural la documentación, las metodologías, los datos y los resultados del proyecto PISF-25-03, con respuestas ancladas en el corpus del proyecto,
 fuentes citadas de forma verificable y abstención explícita cuando la pregunta no tiene
 respaldo documental.
 
@@ -469,30 +470,33 @@ Lo que se prueba, y por qué:
 
 ### 3.11 Despliegue
 
-El asistente se ejecuta con los mismos archivos de Docker Compose de desarrollo y de
-producción del Producto 1, con tres cambios: la imagen de PostgreSQL pasa de
-`postgres:16-alpine` a `pgvector/pgvector:pg16`; la API recibe `RAG__PROVIDER`, `AWS_REGION` y,
-si se usa la alternativa, `OPENAI_API_KEY`; y la carpeta `docs/` se monta en solo lectura como
-corpus. Para publicarlo en la instancia EC2 existente deben atenderse tres puntos:
+El sistema se ejecuta con los mismos archivos de Docker Compose de desarrollo y de producción
+del Producto 1, con tres cambios: la imagen de PostgreSQL pasa de `postgres:16-alpine` a
+`pgvector/pgvector:pg16`; la API recibe `RAG__PROVIDER`, `AWS_REGION` y, si se usa la
+alternativa, `OPENAI_API_KEY`; y la carpeta `docs/` se monta en solo lectura como corpus. Se
+publicó el **26 de noviembre de 2026** en la instancia EC2 existente, en
+https://100-49-251-85.sslip.io/asistente, con tres puntos atendidos:
 
-1. **Rol IAM de la instancia.** La API obtiene credenciales de Bedrock del rol de la instancia;
-   el rol debe permitir `bedrock:InvokeModel` (embeddings) y
-   `bedrock:InvokeModelWithResponseStream` (generación en flujo) sobre ambos modelos y el
-   perfil de inferencia de Claude Haiku 4.5, y el acceso a esos modelos debe estar habilitado
-   en la consola de Bedrock para us-east-1. Como la instancia exige IMDSv2, el límite de saltos
-   de los metadatos debe ser al menos 2 para que un contenedor alcance el servicio de
-   credenciales.
+1. **Rol IAM de la instancia.** La API obtiene credenciales de Bedrock del rol de la instancia.
+   El rol `caudales-demo-bedrock` se crea ahora en `deploy/aws/create.sh`: permite
+   `bedrock:InvokeModel` (embeddings) y `bedrock:InvokeModelWithResponseStream` (generación en
+   flujo) solo sobre los dos modelos usados y el perfil de inferencia de Claude Haiku 4.5, se
+   asocia a la instancia mediante un perfil de instancia y eleva a 2 el límite de saltos de los
+   metadatos IMDSv2, necesario para que un contenedor alcance el servicio de credenciales. El
+   acceso a los modelos está habilitado en la consola de Bedrock para us-east-1.
 2. **Cambio de imagen de PostgreSQL.** La imagen `pgvector` se basa en Debian (glibc) y la
    anterior en Alpine (musl). El volumen de datos se conserva, pero el orden de las
-   intercalaciones de texto puede diferir, por lo que tras el cambio debe ejecutarse
+   intercalaciones de texto puede diferir, por lo que se ejecutó
    `REINDEX DATABASE caudales;` antes de abrir la plataforma. La extensión `vector` y las
    tablas del asistente se crean solas al arrancar la API.
-3. **Indexado inicial.** El primer arranque con el nuevo corpus calcula los embeddings de unos
-   doscientos fragmentos; los arranques siguientes son instantáneos mientras no cambie la
-   huella. La detención automática por inactividad del Producto 1 no afecta al índice, que
-   persiste en la base.
+3. **Corpus e indexado inicial.** El *script* de despliegue (`deploy/aws/caudales`) envía con
+   `rsync` la carpeta `docs/` —cuyo Markdown es el corpus—, excluyendo `docs/capturas` y los
+   archivos `.docx`. El primer arranque con el corpus calcula los embeddings de unos doscientos
+   fragmentos; los siguientes son instantáneos mientras no cambie la huella. La detención
+   automática por inactividad del Producto 1 no afecta al índice, que persiste en la base.
 
-[CONFIRMAR: fecha y estado de la publicación del asistente en https://100-49-251-85.sslip.io/]
+Tras la publicación se verificó que la respuesta en flujo continuo llega de forma incremental a
+través del *proxy* inverso.
 
 ### 3.12 Proceso de desarrollo
 
@@ -642,9 +646,11 @@ conviene validarlos con preguntas nuevas.
 
 ## 6. Limitaciones y trabajo futuro
 
-- **Publicación en producción.** El asistente está verificado en el entorno local contra
-  Bedrock; su publicación en la instancia EC2 requiere el rol IAM, el límite de saltos de
-  metadatos y el `REINDEX` descritos en 3.11. [CONFIRMAR: estado de la publicación]
+- **Resultados de los Productos 2 en adelante.** El ámbito de «resultados» cubre hoy los del
+  Producto 1 y la evaluación del sistema. Los resultados de suavizamiento, imputación y
+  regionalización funcional se incorporarán al corpus a medida que se generen en el Producto 2;
+  el mecanismo de proyección del catálogo (`CatalogProjection`) y la lectura de las carpetas
+  `docs/informes` y `docs/corpus` ya permiten añadirlos sin cambios en la canalización.
 - **Abstención dependiente del modelo.** Seis de las ocho abstenciones de la evaluación las
   decidió el modelo con la marca convenida. Si se cambia el modelo de generación —incluido el
   paso a OpenAI— debe repetirse la evaluación: un modelo que no respete la marca declinaría en
@@ -673,8 +679,10 @@ conviene validarlos con preguntas nuevas.
 
 ## 7. Conclusiones
 
-- Se incorporó a la plataforma del proyecto un asistente que responde en lenguaje natural
-  sobre la postulación, los informes y el catálogo de la base de datos, **citando el fragmento
+- Se incorporó a la plataforma del proyecto un sistema de consulta inteligente que responde en
+  lenguaje natural sobre la documentación, las metodologías, los datos y los resultados del
+  Producto 1 (postulación, informes, grafo de conocimiento, repositorio y catálogo de
+  estaciones y series), **citando el fragmento
   de procedencia** de cada afirmación y sin infraestructura adicional: la base vectorial es la
   misma instancia de PostgreSQL, ahora con `pgvector`.
 - El anclaje documental se sostiene en mecanismos independientes y verificables: un umbral que
@@ -783,5 +791,5 @@ python3 scripts/rag_eval/run_eval.py --api http://localhost:5000
 ### Anexo 5 — Repositorio y despliegue
 
 - **Código fuente (GitHub, rama producto-3):**
-  https://github.com/Valentinpico/caudales-epn/tree/producto-3 [CONFIRMAR: rama publicada]
-- **Plataforma desplegada:** https://100-49-251-85.sslip.io/ [CONFIRMAR: asistente publicado]
+  https://github.com/Valentinpico/caudales-epn/tree/producto-3 
+- **Plataforma desplegada:** https://100-49-251-85.sslip.io/ (asistente en https://100-49-251-85.sslip.io/asistente, publicado el 26 de noviembre de 2026)

@@ -3,25 +3,25 @@
 
 > Documento corto (formato administrativo). El detalle técnico está en
 > `informe-tecnico-producto-3.md` y la evaluación en `evaluacion-rag.md`.
-> Campos `[COMPLETAR: ...]` y `[CONFIRMAR]` pendientes.
+> Campos `[COMPLETAR: ...]` pendientes.
 
 | Campo | Valor |
 |-------|-------|
-| **NOMBRE DEL PRODUCTO** | Implementación de un asistente de consulta documental basado en generación aumentada por recuperación (RAG) sobre la documentación del proyecto, con respuestas ancladas en el corpus, fuentes citadas de forma verificable y consulta temporal de archivos propios. [CONFIRMAR: redacción contractual del producto] |
+| **NOMBRE DEL PRODUCTO** | Sistema de consulta inteligente basado en RAG para documentación, metodologías, datos y resultados del proyecto |
 | **CÓDIGO PROYECTO** | PISF-25-03 |
 | **NOMBRE DE PROYECTO** | Metodología para la regionalización de caudales en Ecuador basada en el Análisis de Datos Funcionales y la homogeneización de variables hidrometeorológicas |
 | **NOMBRE DEL PROFESIONAL** | Kenig Valentín Pico Ponce |
-| **PERÍODO** | 01 al 31 de diciembre de 2026 [CONFIRMAR] |
+| **PERÍODO** | 01 al 31 de diciembre de 2026 |
 | **FECHA DE PRESENTACIÓN** | [COMPLETAR: fecha de entrega] |
 
 ---
 
 ## 1. OBJETIVO
 
-Implementar un asistente de consulta documental, integrado a la plataforma web del Producto 1,
-que permita interrogar en lenguaje natural la documentación del proyecto —postulación,
-informes y catálogo de la base de datos (grafo de conocimiento, repositorio digital y
-estaciones)—, con respuestas ancladas en ese corpus, fuentes citadas de forma verificable,
+Implementar un sistema de consulta inteligente basado en RAG, integrado a la plataforma web del
+Producto 1, que permita interrogar en lenguaje natural la documentación (informes,
+postulación y repositorio), las metodologías (métodos del grafo y de la postulación), los datos
+(catálogo de estaciones y series) y los resultados del proyecto, con respuestas ancladas en ese corpus, fuentes citadas de forma verificable,
 abstención explícita cuando la pregunta no tiene respaldo documental y consulta temporal de
 archivos propios.
 
@@ -70,11 +70,15 @@ Durante el período se desarrollaron las siguientes actividades:
 
 Los productos generados durante el presente período incluyen:
 
-### Producto 3 — Asistente de consulta documental (RAG) sobre la documentación del proyecto
+### Producto 3 — Sistema de consulta inteligente basado en RAG para documentación, metodologías, datos y resultados del proyecto
 
-El producto entregado es un asistente de consulta integrado a la plataforma web del proyecto
-que responde preguntas en lenguaje natural sobre la postulación, los informes y el catálogo de
-la base de datos. El asistente recupera los fragmentos pertinentes del corpus, se los entrega
+El producto entregado es un sistema de consulta inteligente (el asistente) integrado a la
+plataforma web del proyecto, publicado el 26 de noviembre de 2026 en
+https://100-49-251-85.sslip.io/asistente. Responde preguntas en lenguaje natural sobre la
+documentación, las metodologías, los datos y los resultados del Producto 1: postulación,
+informes, grafo de conocimiento, repositorio y catálogo de estaciones y series. Los resultados
+de suavizamiento, imputación y regionalización funcional se incorporarán al corpus a medida
+que se generen en el Producto 2. El asistente recupera los fragmentos pertinentes del corpus, se los entrega
 al modelo de lenguaje como único contexto y cita en cada afirmación el fragmento de
 procedencia, que la interfaz enlaza a su documento junto con su sección y su similitud con la
 pregunta. Cuando la pregunta no tiene respaldo en la documentación, se abstiene de forma
@@ -85,7 +89,7 @@ proveedor de modelos, con OpenAI como alternativa configurable.
 
 **Resultados alcanzados:**
 
-1. Asistente de consulta documental en la página «Asistente» y en un botón flotante presente en
+1. Sistema de consulta inteligente (asistente) en la página «Asistente» y en un botón flotante presente en
    toda la plataforma, con respuesta en flujo continuo.
 2. Respuestas ancladas en el corpus con citas numeradas y fuentes enlazadas a su documento, su
    sección y su porcentaje de similitud.
