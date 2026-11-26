@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16   # PostgreSQL 16 + pgvector (document assistant)
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-caudales}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-caudales}
@@ -26,12 +26,18 @@ services:
       Admin__Password: ${ADMIN_PASSWORD:-caudales-admin-2026}
       RawData__Dir: /app/info
       Cors__Origin: http://localhost:5174
+      RAG__PROVIDER: ${RAG__PROVIDER:-bedrock}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_PROFILE: ${AWS_PROFILE:-default}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     ports:
       - "8081:8080"
     volumes:
       - ./backend:/app
       - ./data:/app/data          # repository files (seed + uploads), served at /files
       - ./info:/app/info:ro       # raw INAMHI exports
+      - ./docs:/app/docs:ro       # Markdown corpus of the document assistant
+      - ${HOME}/.aws:/root/.aws:ro  # AWS credentials for Bedrock (default credential chain)
       - backend_obj:/app/obj
       - backend_bin:/app/bin
 

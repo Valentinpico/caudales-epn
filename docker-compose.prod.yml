@@ -46,12 +46,17 @@ services:
       Admin__Password: "${ADMIN_PASSWORD:?set ADMIN_PASSWORD in .env}"
       RawData__Dir: /app/info
       Cors__Origin: "https://${SITE_ADDRESS}"
+      # Bedrock uses the EC2 instance role (IMDSv2 hop limit must be >= 2 for containers).
+      RAG__PROVIDER: ${RAG__PROVIDER:-bedrock}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     volumes:
       - ./data:/app/data          # repository files (seed + uploads), served at /files
       - ./info:/app/info:ro       # raw INAMHI exports
+      - ./docs:/app/docs:ro       # Markdown corpus of the document assistant
 
   postgres:
-    image: postgres:16-alpine
+    image: pgvector/pgvector:pg16   # PostgreSQL 16 + pgvector (document assistant)
     restart: unless-stopped
     environment:
       POSTGRES_USER: caudales
