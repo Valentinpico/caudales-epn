@@ -98,5 +98,7 @@ public static class ChatEndpoints
 
     /// <summary>Chat routes open to visitors; everything else under /api/chat stays admin-only for mutations.</summary>
     public static bool IsPublic(string path) =>
-        path is "/api/chat/ask" or "/api/chat/upload" || path.StartsWith("/api/chat/session/");
+        path.Equals("/api/chat/ask", StringComparison.OrdinalIgnoreCase)
+        || path.Equals("/api/chat/upload", StringComparison.OrdinalIgnoreCase)
+        || path.StartsWith("/api/chat/session/", StringComparison.OrdinalIgnoreCase);
 }

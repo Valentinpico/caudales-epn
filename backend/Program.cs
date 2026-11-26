@@ -93,9 +93,7 @@ app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvid
 var adminPassword = cfg["Admin:Password"] ?? throw new InvalidOperationException("Admin:Password is required.");
 app.Use(async (ctx, next) =>
 {
-    var isMutation = ctx.Request.Method is "POST" or "PUT" or "DELETE" or "PATCH";
-    var path = ctx.Request.Path.Value ?? "";
-    if (isMutation && path.StartsWith("/api") && path != "/api/admin/verify" && !ChatEndpoints.IsPublic(path)
+    if (AdminGate.RequiresPassword(ctx.Request.Method, ctx.Request.Path.Value ?? "")
         && ctx.Request.Headers["X-Admin-Password"] != adminPassword)
     {
         ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
