@@ -1,5 +1,6 @@
 using System.Text.Json;
 using CaudalesPlatform.Api.Application.Rag;
+using CaudalesPlatform.Api.Infrastructure.Rag;
 using CaudalesPlatform.Api.Shared;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Json;
@@ -17,7 +18,7 @@ public static class ChatEndpoints
 
     public static void MapChat(this WebApplication app)
     {
-        var g = app.MapGroup("/api/chat");
+        var g = app.MapGroup("/api/chat").AddEndpointFilter(RequireProvider);
 
         g.MapGet("/health", async (RagOptions o, IChunkStore store, CorpusService corpus, ILogger<CorpusService> log,
             CancellationToken ct) =>
@@ -113,6 +114,15 @@ public static class ChatEndpoints
             Results.Ok(new { sessionId, deletedChunks = await files.DeleteSessionAsync(sessionId, ct) }))
             .RequireRateLimiting(RateLimitPolicy);
     }
+
+    /// <summary>
+    /// A misconfigured provider disables only the assistant: every /api/chat route answers 503
+    /// with a plain message while the rest of the API keeps working.
+    /// </summary>
+    public static async ValueTask<object?> RequireProvider(EndpointFilterInvocationContext ctx, EndpointFilterDelegate next) =>
+        ctx.HttpContext.RequestServices.GetRequiredService<RagModels>().Available
+            ? await next(ctx)
+            : Results.Json(new { error = RagModels.UnavailableMessage }, statusCode: StatusCodes.Status503ServiceUnavailable);
 
     /// <summary>Chat routes open to visitors; everything else under /api/chat stays admin-only for mutations.</summary>
     public static bool IsPublic(string path) =>

@@ -9,6 +9,10 @@ using CaudalesPlatform.Api.Domain.Entities;
 using CaudalesPlatform.Api.Infrastructure;
 using CaudalesPlatform.Api.Infrastructure.Rag;
 using CaudalesPlatform.Api.Shared;
+using CaudalesPlatform.Api.Api;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CaudalesPlatform.Tests;
 
@@ -522,6 +526,48 @@ public class RagProviderTests
             RagProviders.Create(new RagOptions { Provider = "openai" }, FakeBedrock, NoHttp));
         Assert.Throws<InvalidOperationException>(() =>
             RagProviders.Create(new RagOptions { Provider = "ollama" }, FakeBedrock, NoHttp));
+    }
+
+    [Fact]
+    public async Task A_misconfigured_provider_leaves_the_assistant_unavailable_instead_of_throwing()
+    {
+        var log = NullLogger.Instance;
+        var noKey = RagProviders.CreateOrUnavailable(new RagOptions { Provider = "openai" }, FakeBedrock, NoHttp, log);
+        var noCredentials = RagProviders.CreateOrUnavailable(new RagOptions(),
+            () => throw new AmazonClientException("sin credenciales"), NoHttp, log);
+
+        foreach (var models in new[] { noKey, noCredentials })
+        {
+            Assert.False(models.Available);
+            var e = await Assert.ThrowsAsync<ServiceUnavailableError>(() => models.Embedder.EmbedAsync(["x"], true, default));
+            Assert.Equal((503, "El asistente no está disponible en este momento."), (e.StatusCode, e.Message));
+            Assert.Throws<ServiceUnavailableError>(() => models.Chat.StreamAsync("s", [], default));
+        }
+        Assert.True(RagProviders.CreateOrUnavailable(new RagOptions(), FakeBedrock, NoHttp, log).Available);
+    }
+
+    [Theory]
+    [InlineData(true, 200)]
+    [InlineData(false, 503)]
+    public async Task Chat_routes_answer_503_with_a_plain_message_when_the_provider_is_unavailable(bool available, int status)
+    {
+        var models = available ? new RagModels(new FakeEmbedder(), new FakeChat()) : RagModels.Unavailable();
+        var http = new DefaultHttpContext
+        {
+            RequestServices = new ServiceCollection()
+                .AddSingleton(models).AddLogging().BuildServiceProvider(),
+        };
+        http.Response.Body = new MemoryStream();
+
+        var result = await ChatEndpoints.RequireProvider(
+            EndpointFilterInvocationContext.Create(http),
+            _ => ValueTask.FromResult<object?>(Results.Ok()));
+        await ((IResult)result!).ExecuteAsync(http);
+
+        Assert.Equal(status, http.Response.StatusCode);
+        if (!available)
+            Assert.Equal("""{"error":"El asistente no está disponible en este momento."}""",
+                Encoding.UTF8.GetString(((MemoryStream)http.Response.Body).ToArray()));
     }
 
     [Fact]

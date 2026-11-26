@@ -98,3 +98,20 @@ describe("chatApi.ask", () => {
     await expect(chatApi.ask({ question: "q", history: [] }, () => {})).rejects.toThrow(INTERRUPTED_MESSAGE);
   });
 });
+
+describe("server error messages", () => {
+  const unavailable = "El asistente no está disponible en este momento.";
+  const json = (status: number, error: string) => async () => new Response(JSON.stringify({ error }), { status });
+
+  it("shows the 503 message when the provider is unavailable", async () => {
+    vi.stubGlobal("fetch", vi.fn(json(503, unavailable)));
+    await expect(chatApi.ask({ question: "q", history: [] }, () => {})).rejects.toThrow(unavailable);
+    await expect(chatApi.health()).rejects.toThrow(unavailable);
+  });
+
+  it("shows the 413 message when the session upload quota is reached", async () => {
+    const quota = "Esta sesión alcanzó el límite de contenido cargado (600 fragmentos).";
+    vi.stubGlobal("fetch", vi.fn(json(413, quota)));
+    await expect(chatApi.upload("abcdefgh", new File(["x"], "a.txt"))).rejects.toThrow(quota);
+  });
+});

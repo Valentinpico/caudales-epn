@@ -35,8 +35,9 @@ builder.Services.AddSingleton(rag);
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton(NpgsqlDataSource.Create(cfg.GetConnectionString("Postgres")!));
 builder.Services.AddSingleton<IChunkStore, PgVectorChunkStore>();
-builder.Services.AddSingleton(_ => RagProviders.Create(rag,
-    () => RagProviders.BedrockClient(rag), () => RagProviders.OpenAiHttpClient(rag)));
+builder.Services.AddSingleton(sp => RagProviders.CreateOrUnavailable(rag,
+    () => RagProviders.BedrockClient(rag), () => RagProviders.OpenAiHttpClient(rag),
+    sp.GetRequiredService<ILogger<RagModels>>()));
 builder.Services.AddSingleton(sp => sp.GetRequiredService<RagModels>().Embedder);
 builder.Services.AddSingleton(sp => sp.GetRequiredService<RagModels>().Chat);
 builder.Services.AddSingleton<CorpusService>();

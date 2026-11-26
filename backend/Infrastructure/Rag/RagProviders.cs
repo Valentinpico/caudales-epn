@@ -6,11 +6,33 @@ using Amazon;
 using Amazon.BedrockRuntime;
 using Amazon.BedrockRuntime.Model;
 using CaudalesPlatform.Api.Application.Rag;
+using CaudalesPlatform.Api.Shared;
 
 namespace CaudalesPlatform.Api.Infrastructure.Rag;
 
 /// <summary>Picks the embedding and chat implementations from Rag:Provider. Clients are created once and reused.</summary>
-public record RagModels(IEmbedder Embedder, IChatModel Chat);
+public record RagModels(IEmbedder Embedder, IChatModel Chat)
+{
+    /// <summary>False when the provider could not be configured; /api/chat then answers 503.</summary>
+    public bool Available { get; init; } = true;
+
+    public const string UnavailableMessage = "El asistente no está disponible en este momento.";
+
+    public static RagModels Unavailable()
+    {
+        var model = new UnavailableModel();
+        return new(model, model) { Available = false };
+    }
+
+    private sealed class UnavailableModel : IEmbedder, IChatModel
+    {
+        public string Model => "no disponible";
+        public Task<float[][]> EmbedAsync(IReadOnlyList<string> texts, bool isQuery, CancellationToken ct) =>
+            throw new ServiceUnavailableError(UnavailableMessage);
+        public IAsyncEnumerable<string> StreamAsync(string system, IReadOnlyList<ChatTurn> messages, CancellationToken ct) =>
+            throw new ServiceUnavailableError(UnavailableMessage);
+    }
+}
 
 public static class RagProviders
 {
@@ -31,6 +53,21 @@ public static class RagProviders
                         new OpenAiChat(httpClient, o.OpenAiChatModel, o.OpenAiApiKey, o.MaxTokens));
             default:
                 throw new InvalidOperationException($"Proveedor RAG desconocido '{o.Provider}'. Use 'bedrock' u 'openai'.");
+        }
+    }
+
+    /// <summary>
+    /// Same as Create, but a misconfigured provider (missing key, unresolvable credentials) is
+    /// logged and turned into an unavailable assistant instead of breaking the rest of the API.
+    /// </summary>
+    public static RagModels CreateOrUnavailable(
+        RagOptions o, Func<IAmazonBedrockRuntime> bedrock, Func<HttpClient> http, ILogger logger)
+    {
+        try { return Create(o, bedrock, http); }
+        catch (Exception e)
+        {
+            logger.LogError(e, "No se pudo configurar el proveedor RAG '{Provider}'; el asistente queda deshabilitado", o.Provider);
+            return RagModels.Unavailable();
         }
     }
 

@@ -67,8 +67,7 @@ function UploadChip({ upload, busy, onRemove }: { upload: SessionUpload; busy: b
 function IndexStatus() {
   const health = useApi(chatApi.health, []);
   const h = health.data;
-  if (health.error)
-    return <p className="text-sm text-rust">No se pudo consultar el estado del índice documental.</p>;
+  if (health.error) return <p className="text-sm text-rust">{health.error}</p>;
   if (!h) return <div className="h-12 animate-pulse rounded-sm bg-grid/50" aria-label="Cargando estado del índice" />;
   return (
     <dl className="grid grid-cols-2 gap-px border border-grid bg-grid text-sm">

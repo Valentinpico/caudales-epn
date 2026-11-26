@@ -168,7 +168,7 @@ export const chatApi = {
 
   async health(): Promise<ChatHealth> {
     const res = await fetch(`${API_URL}/api/chat/health`);
-    if (!res.ok) throw new Error(`Error ${res.status} al consultar el estado del asistente`);
+    if (!res.ok) throw new Error(await errorMessage(res, "No se pudo consultar el estado del índice documental."));
     return res.json();
   },
 };
