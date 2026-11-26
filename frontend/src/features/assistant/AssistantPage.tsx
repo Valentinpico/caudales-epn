@@ -46,7 +46,7 @@ function UploadChip({ upload, busy, onRemove }: { upload: SessionUpload; busy: b
       <span className="min-w-0">
         <span className="block truncate font-semibold">{upload.title}</span>
         <span className="block text-xs text-muted num">
-          {upload.chunks} fragmentos · disponible hasta las {time(upload.expiresAt)}
+          {upload.chunks} {upload.chunks === 1 ? "fragmento" : "fragmentos"} · disponible hasta las {time(upload.expiresAt)}
         </span>
       </span>
       <button

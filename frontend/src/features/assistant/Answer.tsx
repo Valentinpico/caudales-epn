@@ -171,7 +171,7 @@ export function AssistantMessage({ message }: { message: ChatMessage }) {
                 <span key={i} className="h-1.5 w-1.5 animate-pulse rounded-full bg-river" style={{ animationDelay: `${i * 160}ms` }} />
               ))}
             </span>
-            {sources.length ? `Redactando a partir de ${sources.length} fragmentos…` : "Buscando en los documentos del proyecto…"}
+            {sources.length ? `Redactando a partir de ${sources.length} ${sources.length === 1 ? "fragmento" : "fragmentos"}…` : "Buscando en los documentos del proyecto…"}
           </p>
         )
       )}
