@@ -47,7 +47,7 @@ builder.Services.AddRateLimiter(o =>
 {
     o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
     o.OnRejected = (ctx, ct) => new ValueTask(ctx.HttpContext.Response.WriteAsJsonAsync(
-        new { error = "Demasiadas consultas seguidas. Espera un minuto e inténtalo de nuevo." }, ct));
+        new { error = "Demasiadas consultas seguidas. Espere un minuto e inténtelo de nuevo." }, ct));
     o.AddPolicy(ChatEndpoints.RateLimitPolicy, http => RateLimitPartition.GetFixedWindowLimiter(
         http.Connection.RemoteIpAddress?.ToString() ?? "unknown",
         _ => new FixedWindowRateLimiterOptions { PermitLimit = rag.RateLimitPerMinute, Window = TimeSpan.FromMinutes(1) }));

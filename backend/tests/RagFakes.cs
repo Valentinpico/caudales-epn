@@ -41,6 +41,9 @@ internal sealed class FakeStore : IChunkStore
     public int ReplaceCalls { get; private set; }
     public DateTimeOffset? LastPurgeCutoff { get; private set; }
     public (string? SessionId, int K)? LastSearch { get; private set; }
+    /// <summary>Optional per-query hits; FakeEmbedder encodes the text length in the first component.</summary>
+    public Func<float[], List<ScoredChunk>>? HitsFor { get; set; }
+    public List<float[]> Searches { get; } = [];
 
     public Task EnsureSchemaAsync(CancellationToken ct) => Task.CompletedTask;
     public Task<IndexState> GetStateAsync(CancellationToken ct) => Task.FromResult(State);
@@ -57,7 +60,8 @@ internal sealed class FakeStore : IChunkStore
     public Task<List<ScoredChunk>> SearchAsync(float[] query, string model, string? sessionId, int k, CancellationToken ct)
     {
         LastSearch = (sessionId, k);
-        return Task.FromResult(Hits.Where(h => !h.FromSession || sessionId is not null).Take(k).ToList());
+        Searches.Add(query);
+        return Task.FromResult((HitsFor?.Invoke(query) ?? Hits).Where(h => !h.FromSession || sessionId is not null).Take(k).ToList());
     }
 
     public Task AddSessionChunksAsync(string sessionId, IReadOnlyList<ChunkRecord> chunks, string model, CancellationToken ct)

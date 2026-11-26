@@ -68,7 +68,7 @@ public partial class SessionFileService(IEmbedder embedder, IChunkStore store, R
         }
         catch (Exception e) when (e is not OperationCanceledException)
         {
-            throw new ValidationError("No se pudo leer el PDF. Verifica que no esté dañado ni protegido.");
+            throw new ValidationError("No se pudo leer el PDF. Verifique que no esté dañado ni protegido.");
         }
     }
 }

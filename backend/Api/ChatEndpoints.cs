@@ -76,7 +76,7 @@ public static class ChatEndpoints
             catch (Exception e) when (e is not OperationCanceledException)
             {
                 ctx.RequestServices.GetRequiredService<ILogger<ChatService>>().LogError(e, "Falló la respuesta del asistente");
-                await Send("error", new { message = "No se pudo generar la respuesta. Inténtalo de nuevo en unos minutos." });
+                await Send("error", new { message = "No se pudo generar la respuesta. Inténtelo de nuevo en unos minutos." });
             }
         }).RequireRateLimiting(RateLimitPolicy);
 
@@ -84,7 +84,7 @@ public static class ChatEndpoints
         {
             if (req.ContentLength > o.MaxUploadBytes + 64 * 1024)
                 throw new ValidationError($"El archivo supera el tamaño máximo permitido ({o.MaxUploadBytes / (1024 * 1024)} MB).");
-            if (!req.HasFormContentType) throw new ValidationError("Envía el archivo como multipart/form-data.");
+            if (!req.HasFormContentType) throw new ValidationError("Envíe el archivo como multipart/form-data.");
             var form = await req.ReadFormAsync(ct);
             var file = form.Files.GetFile("file") ?? throw new ValidationError("Falta el archivo ('file').");
             await using var stream = file.OpenReadStream();

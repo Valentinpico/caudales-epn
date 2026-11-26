@@ -105,12 +105,35 @@ public class RagPromptTests
             RagPrompt.RetrievalQuery("¿Y el codirector?", [new("user", "¿Quién dirige?"), new("assistant", "X")]));
     }
 
+    [Theory]
+    [InlineData("¿Y quién la codirige?", true)]
+    [InlineData("¿Y el presupuesto?", true)]
+    [InlineData("¿Cuál es la capital de Francia?", false)]
+    [InlineData("¿Qué método de homogeneización se aplica a las series?", false)]
+    public void Short_questions_count_as_follow_ups(string question, bool expected) =>
+        Assert.Equal(expected, RagPrompt.IsFollowUp(question));
+
+    [Theory]
+    [InlineData("", MarkerState.Undecided)]
+    [InlineData("  \n", MarkerState.Undecided)]
+    [InlineData("[[SIN_RES", MarkerState.Undecided)]
+    [InlineData(" [[SIN_RESPALDO]]", MarkerState.Marker)]
+    [InlineData("[[SIN_RESPALDO]] extra", MarkerState.Marker)]
+    [InlineData("El proyecto", MarkerState.Answer)]
+    [InlineData("[1", MarkerState.Answer)]
+    [InlineData("[[OTRO", MarkerState.Answer)]
+    public void Classifies_the_start_of_the_stream_against_the_marker(string start, MarkerState expected) =>
+        Assert.Equal(expected, RagPrompt.Classify(start));
+
     [Fact]
     public void System_prompt_pins_grounding_citations_and_language()
     {
         Assert.Contains("ÚNICAMENTE", RagPrompt.System);
         Assert.Contains("[2]", RagPrompt.System);
         Assert.Contains("sin voseo", RagPrompt.System);
+        Assert.Contains("usted", RagPrompt.System);
+        Assert.Contains(RagPrompt.NoSupportMarker, RagPrompt.System);
+        Assert.Contains("Intente reformular", RagPrompt.Abstention);
     }
 }
 
@@ -166,6 +189,96 @@ public class ChatServiceTests
         Assert.Equal(RagPrompt.System, call.System);
         Assert.DoesNotContain("INAMHI...", call.Messages[^1].Content);
         Assert.True(Assert.Single(_embedder.Calls).IsQuery);
+    }
+
+    private static readonly List<ChatTurn> PriorTurn =
+        [new("user", "¿Qué método de homogeneización usa el proyecto?"), new("assistant", "Climatol [1].")];
+
+    private static ScoredChunk Hit(string doc, double score) => new(doc, "T", "S", null, doc, score, false);
+
+    [Fact]
+    public async Task Gate_uses_the_question_only_score_even_when_history_lifts_the_augmented_query()
+    {
+        const string question = "¿Cuál es la capital de Francia?";
+        _store.HitsFor = v => v[0] == question.Length ? [Hit("q", 0.30)] : [Hit("aug", 0.60)];
+
+        var events = await Ask(new(question, History: PriorTurn));
+
+        var embed = Assert.Single(_embedder.Calls);
+        Assert.Equal(2, embed.Texts.Count);
+        Assert.Equal(question, embed.Texts[0]);
+        Assert.Empty(_chat.Calls);
+        var done = Assert.IsType<DoneEvent>(events[^1]);
+        Assert.Equal(AnswerKind.Abstained, done.Kind);
+        Assert.Equal(0.30, done.TopScore);
+    }
+
+    [Fact]
+    public async Task Augmented_query_ranks_the_context_once_the_question_clears_the_floor()
+    {
+        const string question = "¿Qué software se usa para la homogeneización de series?";
+        _store.HitsFor = v => v[0] == question.Length ? [Hit("q", 0.45)] : [Hit("aug", 0.62)];
+
+        var events = await Ask(new(question, History: PriorTurn));
+
+        Assert.Equal(2, _store.Searches.Count);
+        Assert.Equal("aug", Assert.Single(Assert.IsType<SourcesEvent>(events[0]).Sources).DocId);
+        Assert.Equal(AnswerKind.Rag, Assert.IsType<DoneEvent>(events[^1]).Kind);
+    }
+
+    [Fact]
+    public async Task Short_follow_up_borrows_the_previous_turn_to_clear_the_floor()
+    {
+        const string question = "¿Y quién la codirige?";
+        _store.HitsFor = v => v[0] == question.Length ? [Hit("q", 0.20)] : [Hit("aug", 0.58)];
+
+        var events = await Ask(new(question, History: PriorTurn));
+
+        Assert.Equal(AnswerKind.Rag, Assert.IsType<DoneEvent>(events[^1]).Kind);
+        Assert.Single(_chat.Calls);
+    }
+
+    [Fact]
+    public async Task Without_history_only_the_question_is_embedded_and_searched()
+    {
+        _store.Hits = [Hit("q", 0.5)];
+        await Ask(new("¿Qué método de homogeneización usa?"));
+
+        Assert.Single(Assert.Single(_embedder.Calls).Texts);
+        Assert.Single(_store.Searches);
+    }
+
+    [Fact]
+    public async Task Model_marker_split_across_tokens_turns_the_answer_into_an_abstention()
+    {
+        var chat = new FakeChat(" [[SIN", "_RESP", "ALDO]]", " no consta.");
+        _store.Hits = [Hit("q", 0.5)];
+        var events = new List<ChatEvent>();
+        await foreach (var e in new ChatService(_embedder, chat, _store, _options).AskAsync(new("¿Quién ganó el mundial?"), CancellationToken.None))
+            events.Add(e);
+
+        Assert.DoesNotContain(events.OfType<TokenEvent>(), t => t.Text.Contains("[["));
+        Assert.Equal(RagPrompt.Abstention, Assert.Single(events.OfType<TokenEvent>()).Text);
+        var done = Assert.IsType<DoneEvent>(events[^1]);
+        Assert.Equal((AnswerKind.Abstained, RagPrompt.Abstention), (done.Kind, done.Answer));
+        Assert.Empty(done.Sources);
+    }
+
+    [Fact]
+    public async Task Answers_that_do_not_start_with_the_marker_stream_unchanged()
+    {
+        var chat = new FakeChat("[", "1] indica ", "que ", "se usa Climatol.");
+        _store.Hits = [Hit("q", 0.5)];
+        var events = new List<ChatEvent>();
+        await foreach (var e in new ChatService(_embedder, chat, _store, _options).AskAsync(new("¿Qué usa?"), CancellationToken.None))
+            events.Add(e);
+
+        var tokens = events.OfType<TokenEvent>().Select(t => t.Text).ToList();
+        Assert.Equal("[1] indica que se usa Climatol.", string.Concat(tokens));
+        Assert.Equal(["que ", "se usa Climatol."], tokens[^2..]);
+        var done = Assert.IsType<DoneEvent>(events[^1]);
+        Assert.Equal((AnswerKind.Rag, "[1] indica que se usa Climatol."), (done.Kind, done.Answer));
+        Assert.Single(done.Sources);
     }
 
     [Fact]

@@ -22,25 +22,19 @@ public static class AnswerKind
 
 /// <summary>
 /// Retrieve, apply the grounding floor, then stream a grounded answer. When nothing clears the
-/// floor the model is never called: the abstention costs one embedding and no generation.
+/// floor the model is never called: the abstention costs one embedding and no generation. When
+/// the model itself finds no support it replies with a marker, which also becomes an abstention.
 /// </summary>
 public class ChatService(IEmbedder embedder, IChatModel chat, IChunkStore store, RagOptions options)
 {
     public async IAsyncEnumerable<ChatEvent> AskAsync(AskRequest request, [EnumeratorCancellation] CancellationToken ct)
     {
         var (question, sessionId) = Validate(request);
-
-        var query = RagPrompt.RetrievalQuery(question, request.History);
-        var vector = (await embedder.EmbedAsync([query], isQuery: true, ct))[0];
-        var hits = await store.SearchAsync(vector, embedder.Model, sessionId, options.TopK, ct);
-        var topScore = hits.Count == 0 ? 0 : Math.Round(hits.Max(h => h.Score), 4);
-        var grounded = RagPrompt.Grounded(hits, options.MinScore);
+        var (grounded, topScore) = await RetrieveAsync(question, sessionId, request.History, ct);
 
         if (grounded.Count == 0)
         {
-            yield return new SourcesEvent(AnswerKind.Abstained, []);
-            yield return new TokenEvent(RagPrompt.Abstention);
-            yield return new DoneEvent(AnswerKind.Abstained, RagPrompt.Abstention, [], topScore);
+            foreach (var e in Abstain(topScore, sourcesSent: false)) yield return e;
             yield break;
         }
 
@@ -50,12 +44,60 @@ public class ChatService(IEmbedder embedder, IChatModel chat, IChunkStore store,
 
         var messages = RagPrompt.Build(question, grounded, request.History, options.MaxContextChars);
         var answer = new StringBuilder();
+        var state = MarkerState.Undecided;
         await foreach (var token in chat.StreamAsync(RagPrompt.System, messages, ct))
         {
             answer.Append(token);
+            if (state == MarkerState.Undecided)
+            {
+                // Hold the first tokens back until they either spell the marker or diverge from it.
+                state = RagPrompt.Classify(answer.ToString());
+                if (state == MarkerState.Marker) break;
+                if (state == MarkerState.Answer) yield return new TokenEvent(answer.ToString());
+                continue;
+            }
             yield return new TokenEvent(token);
         }
+
+        if (state == MarkerState.Marker)
+        {
+            foreach (var e in Abstain(topScore, sourcesSent: true)) yield return e;
+            yield break;
+        }
+        // A stream that ended while still ambiguous (e.g. "[") is a plain answer.
+        if (state == MarkerState.Undecided && answer.Length > 0) yield return new TokenEvent(answer.ToString());
         yield return new DoneEvent(AnswerKind.Rag, answer.ToString(), sources, topScore);
+    }
+
+    /// <summary>
+    /// The grounding floor is judged on the question alone, so history cannot carry an unrelated
+    /// question over it. The history-augmented query (embedded in the same call) then ranks the
+    /// context; only a short follow-up, too thin to score by itself, may clear the floor through it.
+    /// </summary>
+    private async Task<(List<ScoredChunk> Grounded, double TopScore)> RetrieveAsync(string question, string? sessionId,
+        IReadOnlyList<ChatTurn>? history, CancellationToken ct)
+    {
+        var augmented = RagPrompt.RetrievalQuery(question, history);
+        var texts = augmented == question ? new[] { question } : [question, augmented];
+        var vectors = await embedder.EmbedAsync(texts, isQuery: true, ct);
+
+        var hits = await store.SearchAsync(vectors[0], embedder.Model, sessionId, options.TopK, ct);
+        var grounded = RagPrompt.Grounded(hits, options.MinScore);
+        var topScore = TopScore(hits);
+        if (vectors.Length == 1 || (grounded.Count == 0 && !RagPrompt.IsFollowUp(question))) return (grounded, topScore);
+
+        var augmentedHits = await store.SearchAsync(vectors[1], embedder.Model, sessionId, options.TopK, ct);
+        var augmentedGrounded = RagPrompt.Grounded(augmentedHits, options.MinScore);
+        return augmentedGrounded.Count == 0 ? (grounded, topScore) : (augmentedGrounded, Math.Max(topScore, TopScore(augmentedHits)));
+    }
+
+    private static double TopScore(List<ScoredChunk> hits) => hits.Count == 0 ? 0 : Math.Round(hits.Max(h => h.Score), 4);
+
+    private static IEnumerable<ChatEvent> Abstain(double topScore, bool sourcesSent)
+    {
+        if (!sourcesSent) yield return new SourcesEvent(AnswerKind.Abstained, []);
+        yield return new TokenEvent(RagPrompt.Abstention);
+        yield return new DoneEvent(AnswerKind.Abstained, RagPrompt.Abstention, [], topScore);
     }
 
     /// <summary>Checked before the stream opens, so a bad request still gets a plain 400.</summary>

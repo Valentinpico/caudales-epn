@@ -179,8 +179,8 @@ export function AssistantMessage({ message }: { message: ChatMessage }) {
 
       {abstained && !streaming && (
         <p className="mt-3 text-sm text-muted">
-          Ningún documento del proyecto alcanzó la similitud mínima para responder con seguridad. Reformule la pregunta o
-          adjunte un archivo propio.
+          Los documentos del proyecto no contienen información suficiente para responder con seguridad. Reformule la
+          pregunta o adjunte un archivo propio.
         </p>
       )}
 

@@ -63,6 +63,17 @@ describe("chat store", () => {
     expect(store.getState().messages[1]).toMatchObject({ kind: "abstained", status: "done" });
   });
 
+  it("settles on abstained without sources when done overrides a rag sources event", async () => {
+    const api = fakeApi(async (emit) => {
+      emit({ type: "sources", kind: "rag", sources: [source] });
+      emit({ type: "token", text: "No consta." });
+      emit({ type: "done", kind: "abstained", answer: "No consta.", sources: [], topScore: 0.5 });
+    });
+    const store = createChatStore(new MemoryStorage(), api);
+    await store.ask("¿Quién ganó el mundial?");
+    expect(store.getState().messages[1]).toMatchObject({ kind: "abstained", status: "done", content: "No consta.", sources: [] });
+  });
+
   it("turns request failures and error events into an error message", async () => {
     const store = createChatStore(new MemoryStorage(), fakeApi(async () => { throw new Error("Demasiadas consultas"); }));
     await store.ask("a");
