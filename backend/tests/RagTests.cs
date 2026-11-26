@@ -482,6 +482,15 @@ public class RagProviderTests
     }
 
     [Fact]
+    public void Bedrock_client_uses_standard_retries_not_the_adaptive_client_side_limiter()
+    {
+        var config = RagProviders.BedrockConfig(new RagOptions { Region = "us-east-2" });
+        Assert.Equal(RequestRetryMode.Standard, config.RetryMode);
+        Assert.Equal(6, config.MaxErrorRetry);
+        Assert.Equal("us-east-2", config.RegionEndpoint.SystemName);
+    }
+
+    [Fact]
     public void OpenAi_needs_a_key_and_unknown_providers_fail_clearly()
     {
         var o = new RagOptions { Provider = "OpenAI", OpenAiApiKey = "sk-test" };

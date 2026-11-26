@@ -34,14 +34,19 @@ public static class RagProviders
         }
     }
 
-    /// <summary>Adaptive retries: on-demand Bedrock quotas throttle bursts of embedding calls.</summary>
-    public static IAmazonBedrockRuntime BedrockClient(RagOptions o) =>
-        new AmazonBedrockRuntimeClient(new AmazonBedrockRuntimeConfig
-        {
-            RegionEndpoint = RegionEndpoint.GetBySystemName(o.Region),
-            RetryMode = Amazon.Runtime.RequestRetryMode.Adaptive,
-            MaxErrorRetry = 6,
-        });
+    public static IAmazonBedrockRuntime BedrockClient(RagOptions o) => new AmazonBedrockRuntimeClient(BedrockConfig(o));
+
+    /// <summary>
+    /// Standard retries with backoff absorb throttled bursts of embedding calls. Not Adaptive: its
+    /// client-side rate limiter, shared by every request of this singleton client, kept refusing
+    /// chat calls ("capacity could not be obtained") for minutes after Bedrock had recovered.
+    /// </summary>
+    public static AmazonBedrockRuntimeConfig BedrockConfig(RagOptions o) => new()
+    {
+        RegionEndpoint = RegionEndpoint.GetBySystemName(o.Region),
+        RetryMode = Amazon.Runtime.RequestRetryMode.Standard,
+        MaxErrorRetry = 6,
+    };
 
     public static HttpClient OpenAiHttpClient(RagOptions o) =>
         new() { BaseAddress = new Uri(o.OpenAiBaseUrl), Timeout = TimeSpan.FromMinutes(2) };
