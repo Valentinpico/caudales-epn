@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 import { BrowserRouter, Navigate, NavLink, Route, Routes } from "react-router-dom";
 import { AdminProvider, useAdmin } from "./shared/admin";
 import { OverviewPage } from "./features/overview/OverviewPage";
@@ -6,6 +6,10 @@ import { StationsPage } from "./features/stations/StationsPage";
 import { QualityPage } from "./features/quality/QualityPage";
 import { RepositoryPage } from "./features/repository/RepositoryPage";
 import { GraphPage } from "./features/graph/GraphPage";
+import { AssistantFab } from "./features/assistant/AssistantFab";
+import { Loading } from "./shared/Status";
+
+const AssistantPage = lazy(() => import("./features/assistant/AssistantPage").then((m) => ({ default: m.AssistantPage })));
 
 const NAV = [
   { to: "/", label: "Inicio" },
@@ -13,6 +17,7 @@ const NAV = [
   { to: "/calidad", label: "Calidad de datos" },
   { to: "/repositorio", label: "Repositorio" },
   { to: "/grafo", label: "Grafo de conocimiento" },
+  { to: "/asistente", label: "Asistente" },
 ];
 
 function Mark() {
@@ -106,9 +111,18 @@ function Shell() {
           <Route path="/calidad" element={<QualityPage />} />
           <Route path="/repositorio" element={<RepositoryPage />} />
           <Route path="/grafo" element={<GraphPage />} />
+          <Route
+            path="/asistente"
+            element={
+              <Suspense fallback={<Loading what="el asistente" />}>
+                <AssistantPage />
+              </Suspense>
+            }
+          />
           <Route path="/proyecto" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+      <AssistantFab />
       <footer className="border-t border-grid">
         <p className="mx-auto max-w-[1320px] px-4 py-6 text-xs text-muted sm:px-6">
           Escuela Politécnica Nacional, Departamento de Matemática. Datos crudos del Instituto Nacional de
