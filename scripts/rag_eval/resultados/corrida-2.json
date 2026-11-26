@@ -1,0 +1,2026 @@
+{
+  "health": {
+    "provider": "bedrock",
+    "embeddingModel": "cohere.embed-multilingual-v3",
+    "chatModel": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "chunks": 195,
+    "indexedModel": "cohere.embed-multilingual-v3",
+    "indexedAt": "2026-11-26T00:20:19.615976+00:00",
+    "indexing": false,
+    "minScore": 0.35,
+    "topK": 6,
+    "sessionTtlMinutes": 120,
+    "lastError": null
+  },
+  "summary": {
+    "preguntas": 32,
+    "abstencion": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "esperadas": 8,
+      "emitidas": 8,
+      "acertadas": 8
+    },
+    "respuestas": {
+      "correcta": 22,
+      "parcial": 2
+    },
+    "citasValidas": "24/24",
+    "latencia": {
+      "mediana": 1.474,
+      "p95": 2.572,
+      "medianaRag": 1.613,
+      "p95Rag": 2.637
+    },
+    "topScore": {
+      "enCorpus": {
+        "min": 0.5067,
+        "mediana": 0.6383,
+        "max": 0.7214,
+        "n": 21
+      },
+      "fueraDeCorpus": {
+        "min": 0.3378,
+        "mediana": 0.4364,
+        "max": 0.5813,
+        "n": 6
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "c01",
+      "tema": "objetivo general",
+      "question": "¿Cuál es el objetivo general del proyecto?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.5852,
+      "answer": "El objetivo general del proyecto es desarrollar un modelo matemático de regionalización, homogenización e imputación funcional de caudales en Ecuador, basado en el análisis de datos funcionales (FDA) y técnicas de remuestreo Bootstrap [6].\n\nEste modelo busca cumplir con el OEI2 del PEDI y contribuir estratégicamente a la Agenda 2030 en cuatro dimensiones: asegurar una gestión integrada de recursos hídricos (ODS 6), generar datos precisos para infraestructura hidráulica resiliente (ODS 9), monitorear indicadores de alteración hidrológica para adaptación al cambio climático (ODS 13), y fortalecer institucionalmente a los organismos rectores del agua mediante transferencia tecnológica (ODS 17) [6].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos específicos",
+          "url": "/grafo",
+          "score": 0.5852,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5718,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos de Desarrollo Sostenible",
+          "url": "/grafo",
+          "score": 0.5694,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos específicos",
+          "url": "/grafo",
+          "score": 0.5639,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5555,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "5.1. Objetivo General",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5338,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.936,
+      "firstToken": 1.275,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c02",
+      "tema": "objetivos específicos",
+      "question": "¿Cuáles son los objetivos específicos del proyecto?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6487,
+      "answer": "El proyecto PISF-25-03 tiene cuatro objetivos específicos [1][3]:\n\n- **OE1: Suavizamiento, imputación y agrupamiento funcional** — Ejecutar el proceso de suavizamiento, imputación y agrupamiento funcional de variables meteorológicas mediante FDA, utilizando bases de Fourier y clustering [1].\n\n- **OE2: Homogeneización robusta** — Desarrollar un protocolo de homogeneización hidrometeorológica robusta mediante Climatol, con Moving Block Bootstrap y Stationary Bootstrap para umbrales de detección de quiebres al 95 % de confianza [1].\n\n- **OE3: Regionalización de caudales** — Diseñar una metodología de regionalización de caudales mediante clustering funcional, transformando registros discretos en curvas continuas y llenando vacíos [3].\n\n- **OE4: Difusión** — Difundir los resultados mediante protocolos técnicos para organismos rectores y dos artículos científicos indexados (Scopus/WoS) [3].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos específicos",
+          "url": "/grafo",
+          "score": 0.6487,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6082,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos específicos",
+          "url": "/grafo",
+          "score": 0.6053,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos de Desarrollo Sostenible",
+          "url": "/grafo",
+          "score": 0.6034,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5787,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "2. Objetivos > Objetivos específicos",
+          "url": null,
+          "score": 0.5735,
+          "fromSession": false
+        }
+      ],
+      "latency": 2.662,
+      "firstToken": 0.929,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c03",
+      "tema": "equipo",
+      "question": "¿Quién dirige el proyecto?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.5067,
+      "answer": "Adriana Uquillas Andrade dirige el proyecto en calidad de Directora [2]. Es Doctora en Ciencias y Profesora Agregada a Tiempo Completo (Nivel 3, Grado 5) del Departamento de Matemática de la Escuela Politécnica Nacional [5].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "6. ACEPTACIÓN",
+          "url": null,
+          "score": 0.5067,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Equipo de investigación",
+          "url": "/grafo",
+          "score": 0.4928,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "4. Resultados > 4.1 Página de inicio: proyecto, equipo y cobertura de la red",
+          "url": null,
+          "score": 0.48,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Pago de publicaciones",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.4729,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "1. Infomación del Director, Codirector, Colaboradores y Colaboradores Técnicos",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.4722,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.4705,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.45,
+      "firstToken": 0.902,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c04",
+      "tema": "equipo",
+      "question": "¿Qué colaboradores externos participan en el proyecto y de qué instituciones vienen?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6383,
+      "answer": "Los colaboradores externos que participan en el proyecto son dos [2]:\n\n- **Ramón A. Mollineda Cárdenas**: Doctor en Informática, del Institute of New Imaging Technologies (INIT) de la Universitat Jaume I, Castellón de la Plana, España.\n- **Sandra Janeth Torres Paguay**: Especialista en Meteorología, del Instituto Nacional de Meteorología e Hidrología (INAMHI).",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Instituciones participantes",
+          "url": "/grafo",
+          "score": 0.6383,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Equipo de investigación",
+          "url": "/grafo",
+          "score": 0.5473,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Justificación del presupuesto para la ejecución del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5261,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "1. Infomación del Director, Codirector, Colaboradores y Colaboradores Técnicos",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5212,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5148,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Justificación del presupuesto para la ejecución del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5098,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.697,
+      "firstToken": 0.965,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c05",
+      "tema": "FDA",
+      "question": "¿Para qué se usa el Análisis de Datos Funcionales en el proyecto?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6562,
+      "answer": "El Análisis de Datos Funcionales (FDA) se utiliza en el proyecto para tres propósitos principales:\n\n1. **Tratamiento de hidrogramas como objetos continuos**: El FDA permite tratar los hidrogramas como funciones continuas en lugar de simples series de datos discretos, lo que facilita su análisis y comparación [1].\n\n2. **Regionalización de cuencas mediante clustering funcional**: Se aplica para agrupar cuencas basándose en la dinámica temporal de sus hidrogramas y su respuesta hidrológica (tiempos de crecida y estiaje), superando las limitaciones de la proximidad geográfica tradicional [4].\n\n3. **Reconstrucción funcional de caudales**: El FDA se integra con bases B-splines para la reconstrucción funcional de matrices de datos de caudal, permitiendo la imputación funcional en regiones con escasa instrumentación [5].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6562,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Justificación del presupuesto para la ejecución del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6092,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Actividades del cronograma",
+          "url": "/grafo",
+          "score": 0.5979,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5958,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5863,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Justificación del presupuesto para la ejecución del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5834,
+          "fromSession": false
+        }
+      ],
+      "latency": 2.076,
+      "firstToken": 0.879,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "parcial",
+      "missingFacts": [
+        [
+          "suavizamiento"
+        ],
+        [
+          "Fourier",
+          "curvas continuas",
+          "trayectorias continuas"
+        ]
+      ],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c06",
+      "tema": "bootstrap",
+      "question": "¿Cómo se definen los umbrales para detectar quiebres en las series?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.5967,
+      "answer": "Los umbrales para detectar quiebres se definen mediante técnicas de remuestreo Bootstrap, específicamente Moving Block Bootstrap (MBB) y Stationary Bootstrap (SB), estableciendo un nivel de confianza del 95% [1][2]. Este enfoque elimina la subjetividad visual tradicional al usar métodos estadísticos objetivos para la detección de quiebres mediante el test SNHT (Standard Normal Homogeneity Test) [5].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3. Exclusión de potenciales revisores",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5967,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "7. Resultados Esperados",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5391,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3. Exclusión de potenciales revisores",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5197,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos específicos",
+          "url": "/grafo",
+          "score": 0.5024,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.4989,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.4758,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.515,
+      "firstToken": 0.846,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c07",
+      "tema": "homogeneización",
+      "question": "¿Qué herramienta se usa para homogeneizar las series hidrometeorológicas?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.696,
+      "answer": "La herramienta utilizada para homogeneizar las series hidrometeorológicas es **Climatol**, fortalecida con técnicas de remuestreo **Moving Block Bootstrap (MBB)** y **Stationary Bootstrap (SB)** para la definición de umbrales de detección de quiebres con un 95% de confianza [3]. Esto forma parte del segundo objetivo específico del proyecto, que busca desarrollar un protocolo de homogeneización robusta [5].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "7. Bibliografía",
+          "url": null,
+          "score": 0.696,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "1. Introducción",
+          "url": null,
+          "score": 0.6553,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "1. Introducción",
+          "url": null,
+          "score": 0.6536,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.4 Información incorporada",
+          "url": null,
+          "score": 0.6507,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3. Exclusión de potenciales revisores",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6411,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.6388,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.382,
+      "firstToken": 0.865,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c08",
+      "tema": "B-splines",
+      "question": "¿Cómo se reconstruyen los hidrogramas de caudal?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6065,
+      "answer": "Los hidrogramas de caudal se reconstruyen mediante bases B-splines o Fourier, aplicando el Análisis de Datos Funcionales (FDA) [5]. Este proceso transforma los registros discretos de caudales homogeneizados en su forma funcional, permitiendo representar la dinámica temporal continua de las series [2].\n\nLa reconstrucción de hidrogramas está programada para el Año 1, meses 10–12 del proyecto [5].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Actividades del cronograma",
+          "url": "/grafo",
+          "score": 0.6065,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6043,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.5957,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3. Exclusión de potenciales revisores",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5893,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Actividades del cronograma",
+          "url": "/grafo",
+          "score": 0.589,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Estaciones de Caudal analizado con Hydraccess (m³/s)",
+          "url": "/estaciones",
+          "score": 0.5821,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.853,
+      "firstToken": 0.905,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c09",
+      "tema": "clustering funcional",
+      "question": "¿Con qué criterio se agrupan las cuencas en la regionalización de caudales?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6765,
+      "answer": "Las cuencas se agrupan según la similitud de su respuesta y dinámica temporal, específicamente considerando los tiempos de crecida y estiaje. Se utiliza clustering funcional para esta agrupación, lo que supera las limitaciones de la proximidad geográfica [3].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Proyecto",
+          "url": "/grafo",
+          "score": 0.6765,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.1. Título del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6477,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6463,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3. Exclusión de potenciales revisores",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.632,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos específicos",
+          "url": "/grafo",
+          "score": 0.6305,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "5.1. Objetivo General",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6288,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.328,
+      "firstToken": 0.916,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c10",
+      "tema": "estaciones y periodo",
+      "question": "¿Cuántas estaciones del INAMHI se cargaron y qué período cubren?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6951,
+      "answer": "Se cargaron **175 estaciones del INAMHI** en total, con 5.124.494 observaciones diarias [1].\n\nEl período cubierto varía según el tipo de variable:\n\n- **Precipitación diaria**: 106 estaciones, período 1960-01-01 a 2023-12-28\n- **Temperatura diaria**: 74 estaciones, período 1960-01-01 a 2023-12-29\n- **Caudal diario crudo**: 69 estaciones, período 1962-04-24 a 2015-12-31 [1]",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Resumen de estaciones y series",
+          "url": "/estaciones",
+          "score": 0.6951,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.6481,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.6466,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "2. ACTIVIDADES REALIZADAS",
+          "url": null,
+          "score": 0.6181,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.6047,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Estaciones de Precipitación diaria (mm)",
+          "url": "/estaciones",
+          "score": 0.5983,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.713,
+      "firstToken": 0.837,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c11",
+      "tema": "variables",
+      "question": "¿Qué variables hidrometeorológicas maneja la plataforma?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6273,
+      "answer": "La plataforma maneja tres variables hidrometeorológicas [3]:\n\n- **Caudal**: Caudal diario (m³/s) de las estaciones hidrológicas del INAMHI.\n- **Precipitación**: Precipitación diaria (mm).\n- **Temperatura**: Temperatura diaria (°C).\n\nEn términos de cobertura, la plataforma tiene 175 estaciones del INAMHI con datos distribuidos así: 106 estaciones de precipitación (1.205.798 observaciones, 1960–2023), 74 estaciones de temperatura (805.484 observaciones, 1960–2023) y 69 estaciones de caudal crudo (937.091 observaciones, 1962–2015) [4].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "5. Limitaciones y trabajo pendiente",
+          "url": null,
+          "score": 0.6273,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.4 Información incorporada",
+          "url": null,
+          "score": 0.6218,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Variables hidrometeorológicas",
+          "url": "/grafo",
+          "score": 0.6215,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Resumen de estaciones y series",
+          "url": "/estaciones",
+          "score": 0.6109,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "1. Introducción",
+          "url": null,
+          "score": 0.607,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "6. Conclusiones",
+          "url": null,
+          "score": 0.6039,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.967,
+      "firstToken": 0.995,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c12",
+      "tema": "calidad de datos",
+      "question": "¿Qué reglas de control de calidad se aplican al cargar las series?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6497,
+      "answer": "Se definieron seis reglas de control de calidad que el analizador aplica fila por fila durante la carga. El contexto documenta explícitamente una de ellas:\n\n**Mes duplicado**: cuando la misma estación y mes aparece más de una vez, se conserva la primera fila y se descartan las repeticiones [1].\n\nEl contexto también menciona que el perfil previo de los archivos reveló otras inconsistencias que debían tratarse —meses repetidos (1 099 y 1 097 hallazgos confirmados), una fila con número de mes 0, un valor centinela de 999,9 mm usado como dato faltante y valores extremos aislados [1]— pero no detalla las acciones específicas de las cinco reglas restantes. La página de calidad de datos del aplicativo documenta qué se verificó y qué se hizo con cada caso [2].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.6497,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "4. Resultados > 4.4 Calidad de datos",
+          "url": null,
+          "score": 0.6405,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.5829,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "3. PRODUCTOS ALCANZADOS > Evidencias",
+          "url": null,
+          "score": 0.502,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.10 Validación operativa",
+          "url": null,
+          "score": 0.4836,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.8 Seguridad y administración",
+          "url": null,
+          "score": 0.4801,
+          "fromSession": false
+        }
+      ],
+      "latency": 2.701,
+      "firstToken": 0.848,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "parcial",
+      "missingFacts": [
+        [
+          "300",
+          "fuera de rango"
+        ]
+      ],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c13",
+      "tema": "calidad de datos",
+      "question": "¿Cuántos hallazgos de calidad se registraron en la carga de datos?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6457,
+      "answer": "Se registraron 2 232 hallazgos durante el control de calidad automático de la carga de datos [3]. Estos hallazgos corresponden a inconsistencias detectadas mediante seis reglas de control que verifican meses duplicados, meses y días inválidos, valores ilegibles, códigos de dato faltante (999,9) y valores fuera de rango [3].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "4. Resultados > 4.4 Calidad de datos",
+          "url": null,
+          "score": 0.6457,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.6034,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "2. ACTIVIDADES REALIZADAS",
+          "url": null,
+          "score": 0.5829,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.5672,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.5534,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.5501,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.552,
+      "firstToken": 0.885,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c14",
+      "tema": "series",
+      "question": "¿Cuántas observaciones diarias se cargaron en total?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6381,
+      "answer": "Se cargaron **2 011 282 observaciones diarias en total** [1]. Esta cifra corresponde a 1 205 798 observaciones de precipitación y 805 484 de temperatura [1].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.6381,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Resumen de estaciones y series",
+          "url": "/estaciones",
+          "score": 0.6331,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "6. Conclusiones",
+          "url": null,
+          "score": 0.6095,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.6054,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.6003,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.5861,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.469,
+      "firstToken": 1.186,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c15",
+      "tema": "repositorio",
+      "question": "¿Cómo se organiza el repositorio digital de documentos?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.72,
+      "answer": "El repositorio digital organiza la documentación por **tipo** y **objetivo específico** [1]. \n\nLos tipos de documento aceptados son: propuesta, datos, informe, protocolo, código, artículo [3]. Cuando corresponde, cada documento se clasifica además por su objetivo específico (por ejemplo, OE1 para datos crudos) [2]. Los archivos cargados reciben un prefijo único para evitar colisiones de nombres, y se aceptan únicamente formatos documentales y de datos: PDF, DOCX, XLSX, CSV, Markdown, texto, notebooks, scripts R y Python, ZIP e imágenes [3].\n\nCada documento queda enlazado en el grafo de conocimiento, lo que permite mantener la trazabilidad completa: cada descarte o marca de calidad se registra con su motivo, y cada documento se vincula con el objetivo que respalda [4].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "4. Resultados > 4.5 Repositorio digital",
+          "url": null,
+          "score": 0.72,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-repositorio",
+          "title": "Repositorio digital del proyecto",
+          "section": "Documentos del repositorio",
+          "url": "/repositorio",
+          "score": 0.6415,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.6 Repositorio digital y buenas prácticas",
+          "url": null,
+          "score": 0.6133,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "1. Introducción",
+          "url": null,
+          "score": 0.6065,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "2. Objetivos > Objetivo general",
+          "url": null,
+          "score": 0.5941,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "8. Anexos > Anexo 4 — Repositorio",
+          "url": null,
+          "score": 0.5782,
+          "fromSession": false
+        }
+      ],
+      "latency": 2.498,
+      "firstToken": 0.89,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c16",
+      "tema": "grafo",
+      "question": "¿Cuántos nodos y relaciones tiene el grafo de conocimiento?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6859,
+      "answer": "El grafo de conocimiento contiene **154 nodos y 419 relaciones** [3]. Se reconstruye automáticamente al iniciar el sistema y ante cada alta o baja en el repositorio, por lo que permanece sincronizado con los datos del proyecto [3].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "4. Resultados > 4.6 Grafo de conocimiento",
+          "url": null,
+          "score": 0.6859,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.5 Grafo de conocimiento",
+          "url": null,
+          "score": 0.6264,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.5 Grafo de conocimiento",
+          "url": null,
+          "score": 0.6164,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.2 Modelo de datos",
+          "url": null,
+          "score": 0.5901,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.5673,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.544,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.357,
+      "firstToken": 0.925,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c17",
+      "tema": "presupuesto",
+      "question": "¿Cuál es el presupuesto total del proyecto?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.551,
+      "answer": "El presupuesto total del proyecto es de $15,000.0 [2].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Justificación del presupuesto para la ejecución del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.551,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Pago de publicaciones",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5342,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Justificación del presupuesto para la ejecución del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5314,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Pago de publicaciones",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.4925,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.4729,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Actividades del cronograma",
+          "url": "/grafo",
+          "score": 0.4701,
+          "fromSession": false
+        }
+      ],
+      "latency": 0.963,
+      "firstToken": 0.869,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c18",
+      "tema": "cronograma",
+      "question": "¿En qué meses del cronograma se levantan las series de caudal?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.623,
+      "answer": "El levantamiento de datos de caudal y detección de quiebres se realiza en los meses 7–8 del Año 1 del cronograma del proyecto [3].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Estaciones de Caudal diario crudo (m³/s)",
+          "url": "/estaciones",
+          "score": 0.623,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Estaciones de Caudal diario crudo (m³/s)",
+          "url": "/estaciones",
+          "score": 0.6204,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Actividades del cronograma",
+          "url": "/grafo",
+          "score": 0.6089,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Estaciones de Caudal final rellenado (m³/s)",
+          "url": "/estaciones",
+          "score": 0.5961,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Estaciones de Caudal observado procesado con Climatol (m³/s)",
+          "url": "/estaciones",
+          "score": 0.5926,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Estaciones de Caudal observado procesado con Climatol (m³/s)",
+          "url": "/estaciones",
+          "score": 0.5909,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.159,
+      "firstToken": 0.902,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c19",
+      "tema": "ODS",
+      "question": "¿A qué Objetivos de Desarrollo Sostenible contribuye el proyecto?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.7214,
+      "answer": "El proyecto PISF-25-03 contribuye a cuatro Objetivos de Desarrollo Sostenible [1]:\n\n- **ODS 6: Agua limpia y saneamiento** — mediante la implementación de un modelo de regionalización e imputación funcional que asegura una gestión sostenible y equitativa de los recursos hídricos [3].\n- **ODS 9: Industria, innovación e infraestructura** — a través del desarrollo de herramientas avanzadas y modelos matemáticos de vanguardia para la gestión de información hidrometeorológica [2].\n- **ODS 13: Acción por el clima** — al proveer insumos para la adaptación al cambio climático y criterios de diseño climático-resiliente [4].\n- **ODS 17: Alianzas para lograr los objetivos** — mediante la vinculación institucional con el INAMHI y la difusión de resultados a través de protocolos técnicos [2].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos de Desarrollo Sostenible",
+          "url": "/grafo",
+          "score": 0.7214,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6877,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6789,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5876,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5786,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Objetivos específicos",
+          "url": "/grafo",
+          "score": 0.5588,
+          "fromSession": false
+        }
+      ],
+      "latency": 2.288,
+      "firstToken": 0.949,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c20",
+      "tema": "producto 1",
+      "question": "¿Con qué tecnologías se construyó la plataforma web del producto 1?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.5851,
+      "answer": "La plataforma web se construyó con las siguientes tecnologías [2]:\n\n- **Backend:** .NET 9 (C#) con ASP.NET Core Minimal API\n- **Frontend:** React + TypeScript\n- **Base de datos:** PostgreSQL 16\n- **Orquestación:** Docker Compose\n\nTodo el sistema se implementó como un monorepo único bajo control de versiones, de modo que el backend, el frontend, los documentos y la documentación técnica se versionan de forma atómica y el sistema completo se levanta con un único comando [2].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "3. PRODUCTOS ALCANZADOS > Producto 1 — Aplicativo web para la gestión de series hidrometeorológicas y documentación del proyecto, con repositorio digital y grafo de conocimiento",
+          "url": null,
+          "score": 0.5851,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.1 Arquitectura general",
+          "url": null,
+          "score": 0.581,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "3. PRODUCTOS ALCANZADOS > Producto 1 — Aplicativo web para la gestión de series hidrometeorológicas y documentación del proyecto, con repositorio digital y grafo de conocimiento",
+          "url": null,
+          "score": 0.5807,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.1 Arquitectura general",
+          "url": null,
+          "score": 0.5665,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "2. ACTIVIDADES REALIZADAS",
+          "url": null,
+          "score": 0.5588,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "5. CONCLUSIONES",
+          "url": null,
+          "score": 0.5586,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.776,
+      "firstToken": 0.892,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "c21",
+      "tema": "resultados esperados",
+      "question": "¿Qué publicaciones científicas se esperan del proyecto?",
+      "followUp": null,
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6237,
+      "answer": "Se espera la publicación de dos artículos científicos indexados en revistas de alto impacto (Scopus/WoS) [2]. Estos artículos se enfocarán en la homogeneización meteorológica, homogeneización hidrológica y la regionalización funcional de caudales [2].\n\nLa publicación de estos artículos representa la validación externa por pares de la producción científica del equipo y materializa el Objetivo Específico 4 (Difusión) del proyecto, posicionando la investigación técnica de la EPN a nivel internacional [1][6].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "7. Resultados Esperados",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6237,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6065,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "8. Impacto de la investigación",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5946,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5884,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Pago de publicaciones",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5867,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Justificación del presupuesto para la ejecución del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5855,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.674,
+      "firstToken": 0.83,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "o01",
+      "tema": "fuera de tema",
+      "question": "¿Cuál es la capital de Francia?",
+      "followUp": null,
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "abstained",
+      "topScore": 0.3378,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 0.37,
+      "firstToken": 0.37,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "o02",
+      "tema": "fuera de tema",
+      "question": "¿Quién ganó el Mundial de fútbol de 2022?",
+      "followUp": null,
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "rag",
+      "topScore": 0.354,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 0.894,
+      "firstToken": 0.893,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "o03",
+      "tema": "fuera de tema",
+      "question": "Dame una receta de encebollado.",
+      "followUp": null,
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "rag",
+      "topScore": 0.4852,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 1.478,
+      "firstToken": 1.478,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "o04",
+      "tema": "fuera de tema",
+      "question": "¿Qué es la fotosíntesis?",
+      "followUp": null,
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "rag",
+      "topScore": 0.4293,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 1.294,
+      "firstToken": 1.294,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "o05",
+      "tema": "cercana, sin respaldo",
+      "question": "¿Cuál es el caudal medio anual del río Guayas?",
+      "followUp": null,
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "rag",
+      "topScore": 0.5813,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 1.45,
+      "firstToken": 1.45,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "o06",
+      "tema": "cercana, sin respaldo",
+      "question": "¿Cuántos estudiantes tiene la Escuela Politécnica Nacional?",
+      "followUp": null,
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "rag",
+      "topScore": 0.4435,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 1.296,
+      "firstToken": 1.296,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "f01",
+      "tema": "seguimiento",
+      "question": "¿Y quién es el codirector?",
+      "followUp": "c03",
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.5365,
+      "answer": "Miguel Alfonso Flores Sánchez es el Codirector del proyecto [1]. Es Doctor en Estadística e Investigación Operativa y Profesor Agregado a Tiempo Completo (Nivel 3, Grado 5) del Departamento de Matemática de la Escuela Politécnica Nacional [1].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "1. Infomación del Director, Codirector, Colaboradores y Colaboradores Técnicos",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5365,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "13. Pago de publicaciones",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.5141,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Equipo de investigación",
+          "url": "/grafo",
+          "score": 0.5084,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "6. ACEPTACIÓN",
+          "url": null,
+          "score": 0.4954,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "4. Resultados > 4.1 Página de inicio: proyecto, equipo y cobertura de la red",
+          "url": null,
+          "score": 0.4788,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.4703,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.338,
+      "firstToken": 0.895,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "f02",
+      "tema": "seguimiento",
+      "question": "¿Y qué prueba estadística usa para detectar los quiebres?",
+      "followUp": "c07",
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.6736,
+      "answer": "La prueba estadística utilizada para detectar los quiebres es **SNHT** (Standard Normal Homogeneity Test). Esta prueba se fortalece mediante técnicas de remuestreo Bootstrap (Moving Block Bootstrap y Stationary Bootstrap) para establecer umbrales de detección de quiebres objetivos con un 95% de confianza, eliminando la subjetividad visual tradicional [2].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "7. Bibliografía",
+          "url": null,
+          "score": 0.6736,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6723,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3. Exclusión de potenciales revisores",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6712,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3.2. Resumen del proyecto",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6614,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "5.2. Objetivos Específicos",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6546,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "postulacion-del-proyecto-de-investigacion-pisf-25-03",
+          "title": "Postulación del proyecto de investigación PISF-25-03",
+          "section": "3. Exclusión de potenciales revisores",
+          "url": "/files/documentos/propuesta/postulacion-proyecto-caudales.pdf",
+          "score": 0.6376,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.409,
+      "firstToken": 0.963,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "f03",
+      "tema": "seguimiento",
+      "question": "¿Y de qué archivos provienen esos datos?",
+      "followUp": "c10",
+      "expected": "rag",
+      "kind": "rag",
+      "initialKind": "rag",
+      "topScore": 0.7145,
+      "answer": "Los datos provienen de **archivos crudos extraídos de la base nacional del INAMHI** [4]:\n\n- `INAMHI_precipitacion_CRUDA.csv`: 106 estaciones, período 1960–2023\n- `INAMHI_temperatura_CRUDA.csv`: 74 estaciones, período 1960–2023\n\nEstos archivos están en formato ancho (año × mes × día) [5] y contienen un total de 2.011.282 registros diarios de precipitación y temperatura [6].",
+      "sources": [
+        {
+          "n": 1,
+          "docId": "catalogo-estaciones",
+          "title": "Estaciones y series hidrometeorológicas",
+          "section": "Resumen de estaciones y series",
+          "url": "/estaciones",
+          "score": 0.7145,
+          "fromSession": false
+        },
+        {
+          "n": 2,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.6919,
+          "fromSession": false
+        },
+        {
+          "n": 3,
+          "docId": "catalogo-grafo",
+          "title": "Catálogo del proyecto (grafo de conocimiento)",
+          "section": "Conjuntos de datos",
+          "url": "/grafo",
+          "score": 0.6885,
+          "fromSession": false
+        },
+        {
+          "n": 4,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "3. Metodología e implementación > 3.3 Carga y control de calidad de las series",
+          "url": null,
+          "score": 0.6519,
+          "fromSession": false
+        },
+        {
+          "n": 5,
+          "docId": "informe-mensual-producto-1",
+          "title": "INFORME MENSUAL DE PRODUCTOS ENTREGADOS",
+          "section": "2. ACTIVIDADES REALIZADAS",
+          "url": null,
+          "score": 0.6275,
+          "fromSession": false
+        },
+        {
+          "n": 6,
+          "docId": "informe-tecnico-producto-1",
+          "title": "Implementación de un Aplicativo Web para la Gestión de Series Hidrometeorológicas y Documentación del Proyecto, con Repositorio Digital y Grafo de Conocimiento",
+          "section": "6. Conclusiones",
+          "url": null,
+          "score": 0.623,
+          "fromSession": false
+        }
+      ],
+      "latency": 1.492,
+      "firstToken": 0.968,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": "correcta",
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "f04",
+      "tema": "seguimiento fuera de tema",
+      "question": "¿Y quién ganó el último Mundial de fútbol?",
+      "followUp": "c07",
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "abstained",
+      "topScore": 0.3491,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 0.277,
+      "firstToken": 0.277,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    },
+    {
+      "id": "f05",
+      "tema": "seguimiento fuera de tema (corto)",
+      "question": "¿Y mañana lloverá?",
+      "followUp": "c10",
+      "expected": "abstained",
+      "kind": "abstained",
+      "initialKind": "rag",
+      "topScore": 0.7162,
+      "answer": "No encontré información sobre eso en la documentación del proyecto. Puedo responder preguntas sobre los objetivos, la metodología, el equipo, las estaciones y series hidrometeorológicas o los documentos del repositorio. Intente reformular la pregunta.",
+      "sources": [],
+      "latency": 0.897,
+      "firstToken": 0.897,
+      "error": null,
+      "abstentionCorrect": true,
+      "autoGrade": null,
+      "missingFacts": [],
+      "citationsValid": true,
+      "invalidCitations": []
+    }
+  ]
+}
